@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Send-MKMailMessage")]
+[assembly: AssemblyTitle("PSMailKit")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("The PowerShell Bear")]
-[assembly: AssemblyProduct("Send-MKMailMessage")]
+[assembly: AssemblyProduct("PSMailKit")]
 [assembly: AssemblyCopyright("Copyright © The PowerShell Bear 2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

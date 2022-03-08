@@ -7,8 +7,8 @@
     <ProjectGuid>{5630C3F8-B365-46F3-8B63-3ED9C193C45A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Send_MKMailMessage</RootNamespace>
-    <AssemblyName>Send-MKMailMessage</AssemblyName>
+    <RootNamespace>PSMailKit</RootNamespace>
+    <AssemblyName>PSMailKit</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
