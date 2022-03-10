@@ -4,7 +4,7 @@ Drop-in replacement for Send-MailMessage using MailKit
 
 ## Installing NuGet packages
 
-You need two packages to build this (Visual Studio should restore them without isuse): System.Management.Automatios.dll (version
+You need two packages to build this (Visual Studio should restore them without isuse): System.Management.Automation.dll (version
 10.0.10586; deprecated but needed to target Windows PowerShell rather than just modern PowerShell), and MailKit.
 
 ```powershell
