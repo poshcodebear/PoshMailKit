@@ -15,7 +15,7 @@ namespace PSMailKit
     public class SendMKMailMessage : Cmdlet
     {
         [Parameter(Mandatory = true)]
-        public string To { get; set; }
+        public string[] To { get; set; }
         
         [Parameter]
         public string Subject { get; set; }
@@ -37,7 +37,8 @@ namespace PSMailKit
         {
             MimeMessage message = new MimeMessage();
 
-            message.To.Add(new MailboxAddress("", To));
+            foreach (string recipient in To)
+                message.To.Add(new MailboxAddress("", recipient));
             message.From.Add(new MailboxAddress("", From));
 
             if (Subject != null)
