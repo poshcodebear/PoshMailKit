@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Management.Automation;
 using MimeKit;
+using MimeKit.Text;
 using MailKit;
 using MailKit.Net.Smtp;
 using MailKit.Security;
@@ -16,7 +17,7 @@ namespace PSMailKit
     {
         [Parameter(Mandatory = true)]
         public string[] To { get; set; }
-        
+
         [Parameter]
         public string[] Cc { get; set; }
 
@@ -25,9 +26,12 @@ namespace PSMailKit
 
         [Parameter]
         public string Subject { get; set; }
-        
+
         [Parameter]
         public string Body { get; set; }
+
+        [Parameter]
+        public SwitchParameter BodyAsHtml { get; set; }
         
         // Note: Send-MailMessage does not require this if variable $PSEmailServer is set; should support this ultimately
         [Parameter(Mandatory = true)]
@@ -59,8 +63,16 @@ namespace PSMailKit
             if (Subject != null)
                 message.Subject = Subject;
 
+            TextFormat bodyTextFormat;
+            if (BodyAsHtml)
+                bodyTextFormat = TextFormat.Html;
+            else
+                bodyTextFormat = TextFormat.Plain;
+
             if (Body != null)
-                message.Body = new TextPart("plain") {Text = Body};
+                message.Body = new TextPart(bodyTextFormat) {Text = Body};
+
+            
 
             using (SmtpClient client = new SmtpClient())
             {
