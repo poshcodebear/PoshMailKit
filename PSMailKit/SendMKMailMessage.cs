@@ -18,6 +18,12 @@ namespace PSMailKit
         public string[] To { get; set; }
         
         [Parameter]
+        public string[] Cc { get; set; }
+
+        [Parameter]
+        public string[] Bcc { get; set; }
+
+        [Parameter]
         public string Subject { get; set; }
         
         [Parameter]
@@ -37,9 +43,18 @@ namespace PSMailKit
         {
             MimeMessage message = new MimeMessage();
 
-            foreach (string recipient in To)
-                message.To.Add(new MailboxAddress("", recipient));
             message.From.Add(new MailboxAddress("", From));
+
+            foreach (string toMail in To)
+                message.To.Add(new MailboxAddress("", toMail));
+
+            if (Cc != null)
+                foreach (string ccMail in Cc)
+                    message.Cc.Add(new MailboxAddress("", ccMail));
+
+            if (Bcc != null)
+                foreach (string bccMail in Bcc)
+                    message.Bcc.Add(new MailboxAddress("", bccMail));
 
             if (Subject != null)
                 message.Subject = Subject;
