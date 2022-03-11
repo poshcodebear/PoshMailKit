@@ -12,8 +12,10 @@ using MailKit.Security;
 
 namespace PSMailKit
 {
-    [Cmdlet(VerbsCommunications.Send, "MKMailMessage")]
-    public class SendMKMailMessage : Cmdlet
+    [Cmdlet(
+        VerbsCommunications.Send, "MKMailMessage",
+        DefaultParameterSetName = "Default")]
+    public class SendMKMailMessage : PSCmdlet
     {
         [Parameter(Mandatory = true)]
         public string[] To { get; set; }
@@ -43,8 +45,42 @@ namespace PSMailKit
         [Parameter]
         public int Port { get; set; }
 
-        protected override void ProcessRecord()
+        // Note: as other legacy compatibility options get added, we'll have to figure out how to handle selection without using Mandatory
+        [Parameter(
+            ParameterSetName = "Legacy",
+            Mandatory = true)]
+        public MailPriority Priority { get; set; }
+
+        [Parameter(
+            ParameterSetName = "Modern",
+            Mandatory = true)]
+        public MessagePriority MessagePriority { get; set; }
+
+        protected override void BeginProcessing()
         {
+            if (ParameterSetName == "Default")
+            {
+                MessagePriority = MessagePriority.Normal;
+            }
+            else if (ParameterSetName == "Legacy")
+            {
+                switch (Priority)
+                {
+                    case MailPriority.Low:
+                        MessagePriority = MessagePriority.NonUrgent;
+                        break;
+                    case MailPriority.High:
+                        MessagePriority = MessagePriority.Urgent;
+                        break;
+                    case MailPriority.Normal:
+                        MessagePriority = MessagePriority.Normal;
+                        break;
+                }
+            }
+        }
+
+        protected override void ProcessRecord()
+        {   
             MimeMessage message = new MimeMessage();
 
             message.From.Add(new MailboxAddress("", From));
@@ -72,7 +108,7 @@ namespace PSMailKit
             if (Body != null)
                 message.Body = new TextPart(bodyTextFormat) {Text = Body};
 
-            
+            message.Priority = MessagePriority;
 
             using (SmtpClient client = new SmtpClient())
             {
