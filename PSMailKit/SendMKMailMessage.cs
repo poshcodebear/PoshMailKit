@@ -17,7 +17,9 @@ namespace PSMailKit
         DefaultParameterSetName = "Default")]
     public class SendMKMailMessage : PSCmdlet
     {
-        [Parameter(Mandatory = true)]
+        [Parameter(
+            Mandatory = true,
+            Position = 0)]
         public string[] To { get; set; }
 
         [Parameter]
@@ -26,24 +28,26 @@ namespace PSMailKit
         [Parameter]
         public string[] Bcc { get; set; }
 
-        [Parameter]
+        [Parameter(Position = 1)]
         public string Subject { get; set; }
 
-        [Parameter]
+        [Parameter(Position = 2)]
         public string Body { get; set; }
 
         [Parameter]
         public SwitchParameter BodyAsHtml { get; set; }
         
         // Note: Send-MailMessage does not require this if variable $PSEmailServer is set; should support this ultimately
-        [Parameter(Mandatory = true)]
+        [Parameter(
+            Mandatory = true,
+            Position = 3)]
         public string SmtpServer { get; set; }
         
         [Parameter(Mandatory = true)]
         public string From { get; set; }
-        
+
         [Parameter]
-        public int Port { get; set; }
+        public int Port { get; set; } = 25;
 
         // Note: as other legacy compatibility options get added, we'll have to figure out how to handle selection without using Mandatory
         [Parameter(
