@@ -1,7 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Management.Automation;
 using MimeKit;
@@ -36,6 +38,9 @@ namespace PSMailKit
 
         [Parameter]
         public SwitchParameter BodyAsHtml { get; set; }
+
+        [Parameter]
+        public string[] Attachments { get; set; }
         
         // Note: Send-MailMessage does not require this if variable $PSEmailServer is set; should support this ultimately
         [Parameter(
@@ -60,8 +65,34 @@ namespace PSMailKit
             Mandatory = true)]
         public MessagePriority MessagePriority { get; set; }
 
+        private List<string> filesToAttach { get; set; }
+
         protected override void BeginProcessing()
         {
+            if (Attachments != null)
+            {
+                filesToAttach = new List<string>();
+                string path = SessionState.Path.CurrentFileSystemLocation.Path;
+                Regex pathPattern = new Regex(@"^[a-zA-Z]:");
+
+                foreach (string attachment in Attachments)
+                {
+                    string fileName;
+                    if (!pathPattern.IsMatch(attachment))
+                        fileName = Path.GetFullPath($"{path}\\{attachment}");
+                    else
+                        fileName = attachment;
+
+                    if (File.Exists(fileName))
+                    {
+                        filesToAttach.Add(fileName);
+                        continue;
+                    }
+
+                    throw new FileNotFoundException($"Could not find file '{fileName}'");
+                }
+            }
+
             if (ParameterSetName == "Default")
             {
                 MessagePriority = MessagePriority.Normal;
@@ -110,10 +141,14 @@ namespace PSMailKit
             else
                 builder.TextBody = Body;
 
-            message.Body = builder.ToMessageBody();
+            if (Attachments != null)
+                foreach (string attachment in filesToAttach)
+                    builder.Attachments.Add(attachment);
+
+            message.Body = builder.ToMessageBody();                    
             
             message.Priority = MessagePriority;
-
+            
             using (SmtpClient client = new SmtpClient())
             {
                 //SecureSocketOptions secureSocketOptions = SecureSocketOptions.None;
