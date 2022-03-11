@@ -64,6 +64,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="ModuleMembers\PSMailKit.psd1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>pwsh.exe -C "Remove-Item -Path '$(TargetDir)\PSMailKit' -Recurse -Force -ea ignore"
+pwsh.exe -C "New-Item -Path '$(TargetDir)\PSMailKit' -Type Directory"
+pwsh.exe -C "Copy-Item -Path '$(TargetDir)\*Kit.dll' -Destination '$(TargetDir)\PSMailKit\'"
+pwsh.exe -C "Copy-Item -Path '$(TargetDir)\ModuleMembers\*' -Destination '$(TargetDir)\PSMailKit\'"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
