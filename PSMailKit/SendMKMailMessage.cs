@@ -103,15 +103,15 @@ namespace PSMailKit
             if (Subject != null)
                 message.Subject = Subject;
 
-            TextFormat bodyTextFormat;
+            BodyBuilder builder = new BodyBuilder();
+
             if (BodyAsHtml)
-                bodyTextFormat = TextFormat.Html;
+                builder.HtmlBody = Body;
             else
-                bodyTextFormat = TextFormat.Plain;
+                builder.TextBody = Body;
 
-            if (Body != null)
-                message.Body = new TextPart(bodyTextFormat) {Text = Body};
-
+            message.Body = builder.ToMessageBody();
+            
             message.Priority = MessagePriority;
 
             using (SmtpClient client = new SmtpClient())
