@@ -1,14 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Management.Automation;
 using MimeKit;
-using MimeKit.Text;
-using MailKit;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 
@@ -41,7 +34,10 @@ namespace PSMailKit
 
         [Parameter]
         public string[] Attachments { get; set; }
-        
+
+        [Parameter]
+        public Hashtable InlineAttachments { get; set; }
+
         // Note: Send-MailMessage does not require this if variable $PSEmailServer is set; should support this ultimately
         [Parameter(
             Mandatory = true,
@@ -66,32 +62,17 @@ namespace PSMailKit
         public MessagePriority MessagePriority { get; set; }
 
         private List<string> filesToAttach { get; set; }
+        private List<MimePart> filesToAttachInline { get; set; }
 
         protected override void BeginProcessing()
         {
+            string path = SessionState.Path.CurrentFileSystemLocation.Path;
+
             if (Attachments != null)
-            {
-                filesToAttach = new List<string>();
-                string path = SessionState.Path.CurrentFileSystemLocation.Path;
-                Regex pathPattern = new Regex(@"^[a-zA-Z]:");
+                filesToAttach = MailAttachments.ParseAttachments(path, Attachments);
 
-                foreach (string attachment in Attachments)
-                {
-                    string fileName;
-                    if (!pathPattern.IsMatch(attachment))
-                        fileName = Path.GetFullPath($"{path}\\{attachment}");
-                    else
-                        fileName = attachment;
-
-                    if (File.Exists(fileName))
-                    {
-                        filesToAttach.Add(fileName);
-                        continue;
-                    }
-
-                    throw new FileNotFoundException($"Could not find file '{fileName}'");
-                }
-            }
+            if (InlineAttachments != null)
+                filesToAttachInline = MailAttachments.ParseInlineAttachments(path, InlineAttachments);
 
             if (ParameterSetName == "Default")
             {
@@ -140,10 +121,14 @@ namespace PSMailKit
                 builder.HtmlBody = Body;
             else
                 builder.TextBody = Body;
-
+            
             if (Attachments != null)
                 foreach (string attachment in filesToAttach)
                     builder.Attachments.Add(attachment);
+
+            if (InlineAttachments != null)
+                foreach (MimePart inlineAttachment in filesToAttachInline)
+                    builder.LinkedResources.Add(inlineAttachment);
 
             message.Body = builder.ToMessageBody();                    
             
