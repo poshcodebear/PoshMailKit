@@ -1,4 +1,4 @@
-# PSMailKit
+# PoshMailKit
 
 Drop-in replacement for Send-MailMessage using MailKit
 

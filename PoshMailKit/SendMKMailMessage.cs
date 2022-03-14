@@ -5,7 +5,7 @@ using MimeKit;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 
-namespace PSMailKit
+namespace PoshMailKit
 {
     [Cmdlet(
         VerbsCommunications.Send, "MKMailMessage",

@@ -4,7 +4,7 @@ using MimeKit;
 using System.IO;
 using System.Collections;
 
-namespace PSMailKit
+namespace PoshMailKit
 {
     internal static class MailAttachments
     {

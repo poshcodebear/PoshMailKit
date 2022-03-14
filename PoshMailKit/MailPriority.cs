@@ -1,4 +1,4 @@
-﻿namespace PSMailKit
+﻿namespace PoshMailKit
 {
     // This is for legacy compatibility to avoid using the System.Net.Mail enum of the same name
     public enum MailPriority
