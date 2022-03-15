@@ -2,6 +2,16 @@
 
 Drop-in replacement for Send-MailMessage using MailKit
 
+## Installing from PowerShell Gallery for use
+
+You can find the current version on the PowerShell Gallery here: https://www.powershellgallery.com/packages/PoshMailKit/
+
+You can also install using the following command:
+
+```powershell
+Install-Module -Name PoshMailKit -AllowPrerelease
+```
+
 ## Installing NuGet packages
 
 You need two packages to build this (Visual Studio should restore them without isuse): System.Management.Automation.dll (version
