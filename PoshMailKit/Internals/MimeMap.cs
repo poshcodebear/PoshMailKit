@@ -1,64 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using MimeKit;
-using System.IO;
-using System.Collections;
+﻿using MimeKit;
+using System.Collections.Generic;
 
-namespace PoshMailKit
+namespace PoshMailKit.Internals
 {
-    internal static class MailAttachments
+    internal static class MimeMap
     {
-        internal static Regex pathPattern = new Regex(@"^[a-zA-Z]:");
+        internal static ContentType GetMimeMap(string ext) =>
+            MimeMappings.TryGetValue(ext, out ContentType mimeType) ? mimeType : new ContentType("application", "octet-stream");
 
-        internal static List<string> ParseAttachments(string path, string[] attachments)
-        {
-            List<string> fileList = new List<string>();
-
-            foreach (string attachment in attachments)
-            {
-                string fileName = GetFullPathName(path, attachment);
-
-                if (File.Exists(fileName))
-                {
-                    fileList.Add(fileName);
-                    continue;
-                }
-
-                throw new FileNotFoundException($"Could not find file '{fileName}'");
-            }
-
-            return fileList;
-        }
-
-        internal static List<MimePart> ParseInlineAttachments(string path, Hashtable attachments)
-        {
-            List<MimePart> fileMimePartList = new List<MimePart>();
-
-            foreach (string lable in attachments.Keys)
-            {
-                string fileName = GetFullPathName(path, (string)attachments[lable]);
-
-                if (File.Exists(fileName))
-                {
-                    fileMimePartList.Add( GetFileMimePart(lable, fileName) );
-                    continue;
-                }
-
-                throw new FileNotFoundException($"Could not find file '{fileName}'");
-            }
-
-            return fileMimePartList;
-        }
-
-        private static string GetFullPathName(string path, string attachment)
-        {
-            if (!pathPattern.IsMatch(attachment))
-                return Path.GetFullPath($"{path}\\{attachment}");
-            else
-                return attachment;
-        }
-
-        private static Dictionary<string, ContentType> mimeMappings = new Dictionary<string, ContentType>
+        private static readonly Dictionary<string, ContentType> MimeMappings = new Dictionary<string, ContentType>
         {
             { ".323",         new ContentType("text",        "h323")                                                          },
             { ".aaf",         new ContentType("application", "octet-stream")                                                  },
@@ -404,15 +354,5 @@ namespace PoshMailKit
             { ".z",           new ContentType("application", "x-compress")                                                    },
             { ".zip",         new ContentType("application", "x-zip-compressed")                                              },
         };
-        private static MimePart GetFileMimePart(string lable, string fileName)
-        {
-            Stream fileStream = File.OpenRead(fileName);
-            string ext = Path.GetExtension(fileName);
-            return new MimePart(mimeMappings[ext])
-            {
-                ContentId = lable,
-                Content = new MimeContent(fileStream),
-            };
-        }
     }
 }

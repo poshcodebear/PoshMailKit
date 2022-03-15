@@ -4,6 +4,8 @@ using System.Management.Automation;
 using MimeKit;
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using MimeKit.Text;
+using PoshMailKit.Internals;
 
 namespace PoshMailKit
 {
@@ -12,6 +14,7 @@ namespace PoshMailKit
         DefaultParameterSetName = "Default")]
     public class SendMKMailMessage : PSCmdlet
     {
+        #region Cmdlet parameters
         [Parameter(
             Mandatory = true,
             Position = 0)]
@@ -50,90 +53,190 @@ namespace PoshMailKit
         [Parameter]
         public int Port { get; set; } = 25;
 
-        // Note: as other legacy compatibility options get added, we'll have to figure out how to handle selection without using Mandatory
-        [Parameter(
-            ParameterSetName = "Legacy",
-            Mandatory = true)]
-        public MailPriority Priority { get; set; }
+        // Forces processing into Legacy mode
+        [Parameter(ParameterSetName = "Legacy")]
+        public SwitchParameter Legacy { get; set; }
 
-        [Parameter(
-            ParameterSetName = "Modern",
-            Mandatory = true)]
-        public MessagePriority MessagePriority { get; set; }
+        // Legacy/Modern Priority support
+        [Parameter(ParameterSetName = "Legacy")]
+        public Internals.MailPriority Priority { get; set; }
 
-        private List<string> filesToAttach { get; set; }
-        private List<MimePart> filesToAttachInline { get; set; }
+        [Parameter(ParameterSetName = "Modern")]
+        public MessagePriority MessagePriority { get; set; } = MessagePriority.Normal;
+
+        // Legacy/Modern Encoding support
+        [Parameter(ParameterSetName = "Legacy")]
+        public Encoding Encoding { get; set; }
+
+        [Parameter(ParameterSetName = "Modern")]
+        public System.Text.Encoding CharsetEncoding { get; set; }
+
+        [Parameter(ParameterSetName = "Modern")]
+        public ContentEncoding ContentTransferEncoding { get; set; }
+        #endregion
+
+        private MimeMessage Message { get; set; }
+        private Multipart MultipartMailBody { get; set; }
+        private TextPart MailBody { get; set; }
+        private List<MimePart> FilesToAttach { get; set; }
+        private TextFormat Format
+        { 
+            get { return BodyAsHtml ? TextFormat.Html : TextFormat.Plain; }
+        }
 
         protected override void BeginProcessing()
         {
-            string path = SessionState.Path.CurrentFileSystemLocation.Path;
-
-            if (Attachments != null)
-                filesToAttach = MailAttachments.ParseAttachments(path, Attachments);
-
-            if (InlineAttachments != null)
-                filesToAttachInline = MailAttachments.ParseInlineAttachments(path, InlineAttachments);
-
-            if (ParameterSetName == "Default")
-            {
-                MessagePriority = MessagePriority.Normal;
-            }
-            else if (ParameterSetName == "Legacy")
-            {
-                switch (Priority)
-                {
-                    case MailPriority.Low:
-                        MessagePriority = MessagePriority.NonUrgent;
-                        break;
-                    case MailPriority.High:
-                        MessagePriority = MessagePriority.Urgent;
-                        break;
-                    case MailPriority.Normal:
-                        MessagePriority = MessagePriority.Normal;
-                        break;
-                }
-            }
+            ProcessAttachments();
+            ProcessParameterSets();
         }
 
         protected override void ProcessRecord()
-        {   
-            MimeMessage message = new MimeMessage();
+        {
+            GenerateMailMessage();
+            GenerateMailBody();
+            SendMailMessage();
+        }
 
-            message.From.Add(new MailboxAddress("", From));
+        private void ProcessParameterSets()
+        {
+            if (ParameterSetName == "Default")
+            {
+                MessagePriority = MessagePriority.Normal;
+
+                // Send-MailMessage default encoding is ASCII, but if not explicitly in Legacy mode, default to UTF-8 w/BOM
+                // Not sure if this is a good idea for a default or not; ASCII is probably at least a bit more universally supported
+                CharsetEncoding = System.Text.Encoding.UTF8;
+                ContentTransferEncoding = ContentEncoding.Base64;
+            }
+            else if (ParameterSetName == "Legacy")
+            {
+                SetLegacyPriority();
+                SetLegacyEncoding();
+            }
+        }
+
+        private void ProcessAttachments()
+        {
+            string workingDirectory = SessionState.Path.CurrentFileSystemLocation.Path;
+            FileProcessor fileProcessor = new FileProcessor(workingDirectory);
+            FilesToAttach = new List<MimePart>();
+
+            if (Attachments != null)
+                foreach (string attachment in Attachments)
+                    FilesToAttach.Add(fileProcessor.GetFileMimePart(attachment));
+
+            if (InlineAttachments != null)
+                foreach (string lable in InlineAttachments.Keys)
+                    FilesToAttach.Add(fileProcessor.GetFileMimePart(
+                        (string)InlineAttachments[lable],
+                        new ContentDisposition(ContentDisposition.Inline),
+                        lable));
+        }
+
+        private void SetLegacyPriority()
+        {
+            // Translate priority; Enum default is Normal
+            switch (Priority)
+            {
+                case MailPriority.Normal:
+                    MessagePriority = MessagePriority.Normal;
+                    break;
+                case MailPriority.Low:
+                    MessagePriority = MessagePriority.NonUrgent;
+                    break;
+                case MailPriority.High:
+                    MessagePriority = MessagePriority.Urgent;
+                    break;
+            }
+        }
+
+        private void SetLegacyEncoding()
+        {
+            // Translate Encoding; Enum default is ASCII
+            ContentTransferEncoding = ContentEncoding.QuotedPrintable;
+            switch (Encoding)
+            {
+                case Encoding.ASCII:
+                    CharsetEncoding = System.Text.Encoding.ASCII;
+                    break;
+                case Encoding.BigEndianUnicode:
+                    CharsetEncoding = System.Text.Encoding.BigEndianUnicode;
+                    ContentTransferEncoding = ContentEncoding.Base64;
+                    break;
+                case Encoding.BigEndianUTF32:
+                    CharsetEncoding = System.Text.Encoding.GetEncoding("utf-32BE");
+                    break;
+                // Not going to support this for now
+                /*case Encoding.OEM:
+                    CharsetEncoding = System.Text.Encoding.Default; //Find
+                    break;*/
+                case Encoding.Unicode:
+                    CharsetEncoding = System.Text.Encoding.Unicode;
+                    ContentTransferEncoding = ContentEncoding.Base64;
+                    break;
+                case Encoding.UTF7:
+                    CharsetEncoding = System.Text.Encoding.UTF7;
+                    break;
+                case Encoding.UTF8:
+                    CharsetEncoding = System.Text.Encoding.UTF8;
+                    break;
+                case Encoding.UTF8BOM:
+                    CharsetEncoding = System.Text.Encoding.UTF8;
+                    ContentTransferEncoding = ContentEncoding.Base64;
+                    break;
+                case Encoding.UTF8NoBOM:
+                    CharsetEncoding = System.Text.Encoding.UTF8;
+                    break;
+                case Encoding.UTF32:
+                    CharsetEncoding = System.Text.Encoding.UTF32;
+                    ContentTransferEncoding = ContentEncoding.Base64;
+                    break;
+            }
+        }
+
+        private void GenerateMailBody()
+        {
+            MailBody = new TextPart(Format);
+            MailBody.SetText(CharsetEncoding, Body);
+            MailBody.ContentTransferEncoding = ContentTransferEncoding;
+
+            if (FilesToAttach.Count > 0)
+            {
+                MultipartMailBody = new Multipart("mixed");
+                foreach (MimePart attachment in FilesToAttach)
+                    MultipartMailBody.Add(attachment);
+                MultipartMailBody.Add(MailBody);
+
+                Message.Body = MultipartMailBody;
+            }
+            else
+                Message.Body = MailBody;
+        }
+        
+        private void GenerateMailMessage()
+        {
+            Message = new MimeMessage
+            {
+                Subject = Subject ?? null,
+                Priority = MessagePriority,
+            };
+
+            Message.From.Add(new MailboxAddress("", From));
 
             foreach (string toMail in To)
-                message.To.Add(new MailboxAddress("", toMail));
+                Message.To.Add(new MailboxAddress("", toMail));
 
             if (Cc != null)
                 foreach (string ccMail in Cc)
-                    message.Cc.Add(new MailboxAddress("", ccMail));
+                    Message.Cc.Add(new MailboxAddress("", ccMail));
 
             if (Bcc != null)
                 foreach (string bccMail in Bcc)
-                    message.Bcc.Add(new MailboxAddress("", bccMail));
+                    Message.Bcc.Add(new MailboxAddress("", bccMail));
+        }
 
-            if (Subject != null)
-                message.Subject = Subject;
-
-            BodyBuilder builder = new BodyBuilder();
-
-            if (BodyAsHtml)
-                builder.HtmlBody = Body;
-            else
-                builder.TextBody = Body;
-            
-            if (Attachments != null)
-                foreach (string attachment in filesToAttach)
-                    builder.Attachments.Add(attachment);
-
-            if (InlineAttachments != null)
-                foreach (MimePart inlineAttachment in filesToAttachInline)
-                    builder.LinkedResources.Add(inlineAttachment);
-
-            message.Body = builder.ToMessageBody();                    
-            
-            message.Priority = MessagePriority;
-            
+        private void SendMailMessage()
+        {
             using (SmtpClient client = new SmtpClient())
             {
                 //SecureSocketOptions secureSocketOptions = SecureSocketOptions.None;
@@ -143,7 +246,7 @@ namespace PoshMailKit
                 // Note: only needed if the SMTP server requires authentication
                 //client.Authenticate("joey", "password");
 
-                client.Send(message);
+                client.Send(Message);
                 client.Disconnect(true);
             }
         }
