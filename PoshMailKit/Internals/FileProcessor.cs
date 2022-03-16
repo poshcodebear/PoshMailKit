@@ -1,20 +1,27 @@
 ﻿using MimeKit;
 using System.IO;
+using System.IO.Abstractions;
 using System.Text.RegularExpressions;
 
 namespace PoshMailKit.Internals
 {
-    internal class FileProcessor
+    public class FileProcessor
     {
-        internal string WorkingDirectory { get; set; }
+        public string WorkingDirectory { get; set; }
+        private readonly IFileSystem FileSystem;
         private readonly Regex pathPattern = new Regex(@"^[a-zA-Z]:");
 
-        internal FileProcessor(string workingDirectory)
+        public FileProcessor(string workingDirectory, IFileSystem fileSystem)
         {
+            FileSystem = fileSystem;
             WorkingDirectory = workingDirectory;
         }
 
-        internal string GetFullPathName(string fileName)
+        public FileProcessor(string workingDirectory)
+            : this(workingDirectory, fileSystem: new FileSystem())
+        { }
+
+        public string GetFullPathName(string fileName)
         {
             if (!pathPattern.IsMatch(fileName))
                 return Path.GetFullPath($"{WorkingDirectory}\\{fileName}");
@@ -22,14 +29,14 @@ namespace PoshMailKit.Internals
                 return fileName;
         }
 
-        internal MimePart GetFileMimePart(string fileName)
+        public MimePart GetFileMimePart(string fileName)
         {
             return GetFileMimePart(fileName, new ContentDisposition(ContentDisposition.Attachment));
         }
 
-        internal MimePart GetFileMimePart(string fileName, ContentDisposition contentDisposition, string lable = null)
+        public MimePart GetFileMimePart(string fileName, ContentDisposition contentDisposition, string lable = null)
         {
-            Stream fileStream = File.OpenRead(GetFullPathName(fileName));
+            Stream fileStream = FileSystem.File.OpenRead(GetFullPathName(fileName));
 
             ContentType contentType = MimeMap.GetMimeMap(Path.GetExtension(fileName));
 
