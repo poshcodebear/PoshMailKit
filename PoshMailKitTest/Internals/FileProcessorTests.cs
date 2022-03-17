@@ -92,13 +92,13 @@ namespace PoshMailKitTest.Internals
             var fileProcessor = CreateFileProcessor(@"", GetMockFileSystem());
             string fileName = null;
             ContentDisposition contentDisposition = null;
-            string lable = null;
+            string label = null;
 
             // Act
             var result = fileProcessor.GetFileMimePart(
                 fileName,
                 contentDisposition,
-                lable);
+                label);
 
             // Assert
             Assert.True(false);

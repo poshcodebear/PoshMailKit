@@ -126,11 +126,11 @@ namespace PoshMailKit
                     FilesToAttach.Add(fileProcessor.GetFileMimePart(attachment));
 
             if (InlineAttachments != null)
-                foreach (string lable in InlineAttachments.Keys)
+                foreach (string label in InlineAttachments.Keys)
                     FilesToAttach.Add(fileProcessor.GetFileMimePart(
-                        (string)InlineAttachments[lable],
+                        (string)InlineAttachments[label],
                         new ContentDisposition(ContentDisposition.Inline),
-                        lable));
+                        label));
         }
 
         private void SetLegacyPriority()

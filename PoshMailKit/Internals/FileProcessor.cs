@@ -34,7 +34,7 @@ namespace PoshMailKit.Internals
             return GetFileMimePart(fileName, new ContentDisposition(ContentDisposition.Attachment));
         }
 
-        public MimePart GetFileMimePart(string fileName, ContentDisposition contentDisposition, string lable = null)
+        public MimePart GetFileMimePart(string fileName, ContentDisposition contentDisposition, string label = null)
         {
             Stream fileStream = FileSystem.File.OpenRead(GetFullPathName(fileName));
 
@@ -47,8 +47,8 @@ namespace PoshMailKit.Internals
                 FileName = Path.GetFileName(fileName),
             };
 
-            if (lable != null)
-                mimePart.ContentId = lable;
+            if (label != null)
+                mimePart.ContentId = label;
 
             return mimePart;
         }
