@@ -29,12 +29,7 @@ namespace PoshMailKit.Internals
                 return fileName;
         }
 
-        public MimePart GetFileMimePart(string fileName)
-        {
-            return GetFileMimePart(fileName, new ContentDisposition(ContentDisposition.Attachment));
-        }
-
-        public MimePart GetFileMimePart(string fileName, ContentDisposition contentDisposition, string label = null)
+        public MimePart GetFileMimePart(string fileName, ContentDispositionType contentDisposition, string label = null)
         {
             Stream fileStream = FileSystem.File.OpenRead(GetFullPathName(fileName));
 
@@ -43,7 +38,7 @@ namespace PoshMailKit.Internals
             MimePart mimePart = new MimePart(contentType)
             {
                 Content = new MimeContent(fileStream),
-                ContentDisposition = contentDisposition,
+                ContentDisposition = new ContentDisposition(contentDisposition.ToString()),
                 FileName = Path.GetFileName(fileName),
             };
 
@@ -53,4 +48,5 @@ namespace PoshMailKit.Internals
             return mimePart;
         }
     }
+    public enum ContentDispositionType { Attachment, Inline }
 }

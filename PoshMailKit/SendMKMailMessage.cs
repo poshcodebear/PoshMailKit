@@ -59,7 +59,7 @@ namespace PoshMailKit
 
         // Legacy/Modern Priority support
         [Parameter(ParameterSetName = "Legacy")]
-        public Internals.MailPriority Priority { get; set; }
+        public MailPriority Priority { get; set; }
 
         [Parameter(ParameterSetName = "Modern")]
         public MessagePriority MessagePriority { get; set; } = MessagePriority.Normal;
@@ -123,13 +123,15 @@ namespace PoshMailKit
 
             if (Attachments != null)
                 foreach (string attachment in Attachments)
-                    FilesToAttach.Add(fileProcessor.GetFileMimePart(attachment));
+                    FilesToAttach.Add(fileProcessor.GetFileMimePart(
+                        attachment,
+                        ContentDispositionType.Attachment));
 
             if (InlineAttachments != null)
                 foreach (string label in InlineAttachments.Keys)
                     FilesToAttach.Add(fileProcessor.GetFileMimePart(
                         (string)InlineAttachments[label],
-                        new ContentDisposition(ContentDisposition.Inline),
+                        ContentDispositionType.Inline,
                         label));
         }
 
