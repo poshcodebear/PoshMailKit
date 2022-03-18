@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Internals\Encoding.cs" />
     <Compile Include="Internals\FileProcessor.cs" />
+    <Compile Include="Internals\MailMessage.cs" />
     <Compile Include="Internals\MailPriority.cs" />
     <Compile Include="Internals\MimeMap.cs" />
     <Compile Include="SendMKMailMessage.cs" />
