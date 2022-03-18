@@ -47,7 +47,7 @@ namespace PoshMailKitTest.Internals
 
             // Assert
             Assert.True(result == expectedReturnPath,
-                $"Expected: {expectedReturnPath}, actual: {result}");
+                $"Actual: {result}, expected: {expectedReturnPath}");
             mockRepository.VerifyAll();
         }
 
@@ -66,7 +66,7 @@ namespace PoshMailKitTest.Internals
 
             // Assert
             Assert.True(result == expectedReturnPath,
-                $"Expected: {expectedReturnPath}, actual: {result}");
+                $"Actual: {result}, expected: {expectedReturnPath}");
             mockRepository.VerifyAll();
         }
 
@@ -85,7 +85,7 @@ namespace PoshMailKitTest.Internals
 
             // Assert
             Assert.True(result == expectedReturnPath,
-                $"Expected: {expectedReturnPath}, actual: {result}");
+                $"Actual: {result}, expected: {expectedReturnPath}");
             mockRepository.VerifyAll();
         }
 
@@ -117,13 +117,13 @@ namespace PoshMailKitTest.Internals
             string actualContent = encoding.GetString(stream.ToArray());
 
             Assert.True(result.FileName == fileName,
-                $"Filename: expected '{fileName}', actual '{result.FileName}'");
+                $"Filename: actual '{result.FileName}', expected '{fileName}',");
             Assert.True(result.ContentDisposition.Disposition == expectedContentDisposition.Disposition,
-                $"ContentDispositionType: expected '{expectedContentDisposition.Disposition}', actual '{result.ContentDisposition.Disposition}'");
+                $"ContentDispositionType: actual '{result.ContentDisposition.Disposition}', expected '{expectedContentDisposition.Disposition}'");
             Assert.True(actualContent == fileContents,
-                $"File contents: expected '{fileContents}', actual '{actualContent}'");
+                $"File contents: actual '{actualContent}', expected '{fileContents}'");
             Assert.True(result.ContentType.MimeType == expectedContentType.MimeType,
-                $"ContentType: expected '{expectedContentType.MimeType}', actual '{result.ContentType.MimeType}'");
+                $"ContentType: actual '{result.ContentType.MimeType}', expected '{expectedContentType.MimeType}'");
             mockRepository.VerifyAll();
         }
 
@@ -155,15 +155,16 @@ namespace PoshMailKitTest.Internals
             var actualContent = stream.ToArray();
 
             Assert.True(result.FileName == fileName,
-                $"Filename: expected '{fileName}', actual '{result.FileName}'");
+                $"Filename: actual '{result.FileName}', expected '{fileName}'");
             Assert.True(result.ContentId == fileLabel,
-                $"Filename: expected '{fileLabel}', actual '{result.ContentId}'");
+                $"Filename: actual '{result.ContentId}', expected '{fileLabel}'");
             Assert.True(result.ContentDisposition.Disposition == expectedContentDisposition.Disposition,
-                $"ContentDispositionType: expected '{expectedContentDisposition.Disposition}', actual '{result.ContentDisposition.Disposition}'");
+                $"ContentDispositionType: actual '{result.ContentDisposition.Disposition}', expected '{expectedContentDisposition.Disposition}'");
             Assert.True(Enumerable.SequenceEqual(actualContent, fileContents),
-                $"File contents: expected '{BitConverter.ToString(fileContents)}', actual '{BitConverter.ToString(actualContent)}'");
+                $"File contents: actual '{BitConverter.ToString(actualContent)}', expected '{BitConverter.ToString(fileContents)}'");
             Assert.True(result.ContentType.MimeType == expectedContentType.MimeType,
-                $"ContentType: expected '{expectedContentType.MimeType}', actual '{result.ContentType.MimeType}'");
+                $"ContentType: actual '{result.ContentType.MimeType}', expected '{expectedContentType.MimeType}'");
+           
             mockRepository.VerifyAll();
         }
     }
