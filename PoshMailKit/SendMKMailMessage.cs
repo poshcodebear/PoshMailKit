@@ -103,7 +103,14 @@ namespace PoshMailKit
             MailMessage.NewMailBody(BodyFormat, CharsetEncoding, Body, ContentTransferEncoding);
             MailMessage.AddAttachments(FilesToAttach);
 
-            SendMailMessage();
+            SmtpProcessor processor = new SmtpProcessor()
+            {
+                SmtpServer = SmtpServer,
+                SmtpPort = Port,
+                Message = MailMessage.Message,
+            };
+
+            processor.SendMailMessage();
         }
 
         private void ProcessParameterSets()
@@ -211,22 +218,6 @@ namespace PoshMailKit
                     CharsetEncoding = System.Text.Encoding.UTF32;
                     ContentTransferEncoding = ContentEncoding.Base64;
                     break;
-            }
-        }
-
-        private void SendMailMessage()
-        {
-            using (SmtpClient client = new SmtpClient())
-            {
-                //SecureSocketOptions secureSocketOptions = SecureSocketOptions.None;
-                //client.Connect(SmtpServer, Port, secureSocketOptions);
-                client.Connect(SmtpServer, Port, SecureSocketOptions.None);
-
-                // Note: only needed if the SMTP server requires authentication
-                //client.Authenticate("joey", "password");
-
-                client.Send(MailMessage.Message);
-                client.Disconnect(true);
             }
         }
     }
