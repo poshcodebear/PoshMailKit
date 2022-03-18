@@ -14,9 +14,7 @@ namespace PoshMailKitTest.Internals
 
         public MessageBuilderTests()
         {
-            this.mockRepository = new MockRepository(MockBehavior.Strict);
-
-
+            mockRepository = new MockRepository(MockBehavior.Strict);
         }
 
         private MessageBuilder CreateMessageBuilder()
@@ -25,15 +23,33 @@ namespace PoshMailKitTest.Internals
         }
 
         [Fact]
-        public void AddAttachments_RunTwice_SecondRunAddsFileAndDoesntRemoveFirstFile()
+        public void AddAttachments_EmptyList_DoesNothing()
         {
             // Arrange
-            var mailMessage = this.CreateMessageBuilder();
+            var messageBuilder = CreateMessageBuilder();
+            var filesToAttach = new List<MimePart>();
+
+            // Act
+            messageBuilder.AddAttachments(filesToAttach);
+
+            // Assert
+            var message = messageBuilder.Message;
+
+            Assert.True(message.Body == null,
+                $"MimeTypeFormat: actual '{message.Body}', expected '{null}'");
+
+            mockRepository.VerifyAll();
+        }
+
+        [Fact] 
+        public void AddAttachments_SingleAttachment_SetsMultipartAddsOneFile()
+        {
+            // Arrange
+            var messageBuilder = CreateMessageBuilder();
             List<MimePart> filesToAttach = null;
 
             // Act
-            mailMessage.AddAttachments(
-                filesToAttach);
+            messageBuilder.AddAttachments(filesToAttach);
 
             // Assert
             Assert.True(false);
@@ -45,12 +61,11 @@ namespace PoshMailKitTest.Internals
         public void AddAttachments_DoubleAttachment_SetsMultipartAddsTwoFiles()
         {
             // Arrange
-            var mailMessage = this.CreateMessageBuilder();
+            var messageBuilder = CreateMessageBuilder();
             List<MimePart> filesToAttach = null;
 
             // Act
-            mailMessage.AddAttachments(
-                filesToAttach);
+            messageBuilder.AddAttachments(filesToAttach);
 
             // Assert
             Assert.True(false);
@@ -59,36 +74,18 @@ namespace PoshMailKitTest.Internals
         }
 
         [Fact]
-        public void AddAttachments_SingleAttachment_SetsMultipartAddsOneFile()
+        public void AddAttachments_RunTwice_SecondRunAddsFileAndDoesntRemoveFirstFile()
         {
             // Arrange
-            var mailMessage = this.CreateMessageBuilder();
+            var messageBuilder = CreateMessageBuilder();
             List<MimePart> filesToAttach = null;
 
             // Act
-            mailMessage.AddAttachments(
-                filesToAttach);
+            messageBuilder.AddAttachments(filesToAttach);
 
             // Assert
             Assert.True(false);
 
-            mockRepository.VerifyAll();
-        }
-
-        [Fact]
-        public void AddAttachments_EmptyList_DoesNothing()
-        {
-            // Arrange
-            var mailMessage = this.CreateMessageBuilder();
-            List<MimePart> filesToAttach = null;
-
-            // Act
-            mailMessage.AddAttachments(
-                filesToAttach);
-
-            // Assert
-            Assert.True(false);
-            
             mockRepository.VerifyAll();
         }
 
@@ -113,8 +110,8 @@ namespace PoshMailKitTest.Internals
                 contentTransferEncoding);
 
             // Assert
-            MimeMessage message = messageBuilder.Message;
-            TextPart bodyTextPart = (TextPart)message.Body;
+            var message = messageBuilder.Message;
+            var bodyTextPart = (TextPart)message.Body;
 
             Assert.True(bodyTextPart.ContentType.MimeType == expectedFormat,
                 $"MimeTypeFormat: actual '{bodyTextPart.ContentType.MimeType}', expected '{expectedFormat}'");
