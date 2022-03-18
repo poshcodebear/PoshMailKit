@@ -25,7 +25,58 @@ namespace PoshMailKitTest.Internals
         }
 
         [Fact]
-        public void AddAttachments_StateUnderTest_ExpectedBehavior()
+        public void AddAttachments_RunTwice_SecondRunAddsFileAndDoesntRemoveFirstFile()
+        {
+            // Arrange
+            var mailMessage = this.CreateMessageBuilder();
+            List<MimePart> filesToAttach = null;
+
+            // Act
+            mailMessage.AddAttachments(
+                filesToAttach);
+
+            // Assert
+            Assert.True(false);
+
+            mockRepository.VerifyAll();
+        }
+
+        [Fact]
+        public void AddAttachments_DoubleAttachment_SetsMultipartAddsTwoFiles()
+        {
+            // Arrange
+            var mailMessage = this.CreateMessageBuilder();
+            List<MimePart> filesToAttach = null;
+
+            // Act
+            mailMessage.AddAttachments(
+                filesToAttach);
+
+            // Assert
+            Assert.True(false);
+
+            mockRepository.VerifyAll();
+        }
+
+        [Fact]
+        public void AddAttachments_SingleAttachment_SetsMultipartAddsOneFile()
+        {
+            // Arrange
+            var mailMessage = this.CreateMessageBuilder();
+            List<MimePart> filesToAttach = null;
+
+            // Act
+            mailMessage.AddAttachments(
+                filesToAttach);
+
+            // Assert
+            Assert.True(false);
+
+            mockRepository.VerifyAll();
+        }
+
+        [Fact]
+        public void AddAttachments_EmptyList_DoesNothing()
         {
             // Arrange
             var mailMessage = this.CreateMessageBuilder();
