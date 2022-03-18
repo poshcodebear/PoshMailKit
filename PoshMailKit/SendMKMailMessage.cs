@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Management.Automation;
 using MimeKit;
@@ -86,8 +86,8 @@ namespace PoshMailKit
 
         protected override void BeginProcessing()
         {
-            ProcessAttachments();
             ProcessParameterSets();
+            ProcessAttachments();
         }
 
         protected override void ProcessRecord()
@@ -119,20 +119,29 @@ namespace PoshMailKit
         {
             string workingDirectory = SessionState.Path.CurrentFileSystemLocation.Path;
             FileProcessor fileProcessor = new FileProcessor(workingDirectory);
+
             FilesToAttach = new List<MimePart>();
 
             if (Attachments != null)
-                foreach (string attachment in Attachments)
-                    FilesToAttach.Add(fileProcessor.GetFileMimePart(
-                        attachment,
-                        ContentDispositionType.Attachment));
+            {
+                ContentDispositionType attachmentContent = ContentDispositionType.Attachment;
+                foreach (string file in Attachments)
+                {
+                    MimePart fileMimePart = fileProcessor.GetFileMimePart(file, attachmentContent);
+                    FilesToAttach.Add(fileMimePart);
+                }
+            }
 
             if (InlineAttachments != null)
+            {
+                ContentDispositionType inlineContent = ContentDispositionType.Inline;
                 foreach (string label in InlineAttachments.Keys)
-                    FilesToAttach.Add(fileProcessor.GetFileMimePart(
-                        (string)InlineAttachments[label],
-                        ContentDispositionType.Inline,
-                        label));
+                {
+                    string file = (string)InlineAttachments[label];
+                    MimePart fileMimePart = fileProcessor.GetFileMimePart(file, inlineContent, label);
+                    FilesToAttach.Add(fileMimePart);
+                }
+            }
         }
 
         private void SetLegacyPriority()
