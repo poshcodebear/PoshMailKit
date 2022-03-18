@@ -13,12 +13,16 @@ namespace PoshMailKit.Internals
         public DeliveryStatusNotification? Notification { get; set; }
         public SecureSocketOptions SecureSocketOptions { get; set; }
 
-        public SmtpProcessor()
+        public SmtpProcessor(PMKSmtpClient client)
         {
-            Client = new PMKSmtpClient();
+            Client = client;
             SmtpPort = 25;
             SecureSocketOptions = SecureSocketOptions.None;
         }
+
+        public SmtpProcessor()
+            : this(new PMKSmtpClient())
+        { }
 
         public void SendMailMessage()
         {
