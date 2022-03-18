@@ -40,7 +40,7 @@ namespace PoshMailKit.Internals
                     multipart.Add(TextMailBody);
                     mimeMessage.Body = multipart;
                 }
-                else
+                else if (TextMailBody != null)
                     mimeMessage.Body = TextMailBody;
                 return mimeMessage;
             }
