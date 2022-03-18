@@ -12,8 +12,6 @@ namespace PoshMailKitTest.Internals
     {
         private MockRepository mockRepository;
 
-
-
         public MessageBuilderTests()
         {
             this.mockRepository = new MockRepository(MockBehavior.Strict);
@@ -21,7 +19,7 @@ namespace PoshMailKitTest.Internals
 
         }
 
-        private MessageBuilder CreateMailMessage()
+        private MessageBuilder CreateMessageBuilder()
         {
             return new MessageBuilder();
         }
@@ -30,7 +28,7 @@ namespace PoshMailKitTest.Internals
         public void AddAttachments_StateUnderTest_ExpectedBehavior()
         {
             // Arrange
-            var mailMessage = this.CreateMailMessage();
+            var mailMessage = this.CreateMessageBuilder();
             List<MimePart> filesToAttach = null;
 
             // Act
@@ -39,29 +37,44 @@ namespace PoshMailKitTest.Internals
 
             // Assert
             Assert.True(false);
-            this.mockRepository.VerifyAll();
+            
+            mockRepository.VerifyAll();
         }
 
         [Fact]
-        public void NewMailBody_StateUnderTest_ExpectedBehavior()
+        public void NewMailBody_TypicalUsage_AddsAppropriateMailBodyToBuilder()
         {
             // Arrange
-            var mailMessage = this.CreateMailMessage();
-            TextFormat format = default(global::MimeKit.Text.TextFormat);
-            System.Text.Encoding charsetEncoding = null;
-            string body = null;
-            ContentEncoding contentTransferEncoding = default(global::MimeKit.ContentEncoding);
+            var messageBuilder = CreateMessageBuilder();
+
+            var format = TextFormat.Plain;
+            var charsetEncoding = System.Text.Encoding.ASCII;
+            var body = "This is a test";
+            var contentTransferEncoding = ContentEncoding.QuotedPrintable;
+
+            var expectedFormat = "text/plain";
 
             // Act
-            mailMessage.NewMailBody(
+            messageBuilder.NewMailBody(
                 format,
                 charsetEncoding,
                 body,
                 contentTransferEncoding);
 
             // Assert
-            Assert.True(false);
-            this.mockRepository.VerifyAll();
+            MimeMessage message = messageBuilder.Message;
+            TextPart bodyTextPart = (TextPart)message.Body;
+
+            Assert.True(bodyTextPart.ContentType.MimeType == expectedFormat,
+                $"MimeTypeFormat: actual '{bodyTextPart.ContentType.MimeType}', expected '{expectedFormat}'");
+            Assert.True(bodyTextPart.ContentType.CharsetEncoding == charsetEncoding,
+                $"CharsetEncoding: actual '{bodyTextPart.ContentType.CharsetEncoding}', expected '{charsetEncoding}'");
+            Assert.True(message.TextBody == body,
+                $"Message body: actual '{message.TextBody}', expected '{body}'");
+            Assert.True(bodyTextPart.ContentTransferEncoding == contentTransferEncoding,
+                $"ContentTransferEncoding: actual '{bodyTextPart.ContentTransferEncoding}', expected '{contentTransferEncoding}'");
+
+            mockRepository.VerifyAll();
         }
     }
 }
