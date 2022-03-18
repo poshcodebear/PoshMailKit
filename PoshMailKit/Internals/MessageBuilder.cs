@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace PoshMailKit.Internals
 {
-    public class MailMessage
+    public class MessageBuilder
     {
         // Properties
         private MimeMessage message { get; set; }
@@ -46,7 +46,7 @@ namespace PoshMailKit.Internals
             }
         }
 
-        public MailMessage()
+        public MessageBuilder()
         {
             message = new MimeMessage();
         }

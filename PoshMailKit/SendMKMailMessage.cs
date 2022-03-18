@@ -75,7 +75,7 @@ namespace PoshMailKit
         public ContentEncoding ContentTransferEncoding { get; set; }
         #endregion
 
-        private MailMessage Message { get; set; }
+        private MessageBuilder MailMessage { get; set; }
         private List<MimePart> FilesToAttach { get; set; }
         private TextFormat BodyFormat
         { 
@@ -90,7 +90,7 @@ namespace PoshMailKit
 
         protected override void ProcessRecord()
         {
-            Message = new MailMessage
+            MailMessage = new MessageBuilder
             {
                 Subject = Subject,
                 Priority = MessagePriority,
@@ -100,8 +100,8 @@ namespace PoshMailKit
                 Bcc = Bcc ?? null,
             };
 
-            Message.NewMailBody(BodyFormat, CharsetEncoding, Body, ContentTransferEncoding);
-            Message.AddAttachments(FilesToAttach);
+            MailMessage.NewMailBody(BodyFormat, CharsetEncoding, Body, ContentTransferEncoding);
+            MailMessage.AddAttachments(FilesToAttach);
 
             SendMailMessage();
         }
@@ -225,7 +225,7 @@ namespace PoshMailKit
                 // Note: only needed if the SMTP server requires authentication
                 //client.Authenticate("joey", "password");
 
-                client.Send(Message.Message);
+                client.Send(MailMessage.Message);
                 client.Disconnect(true);
             }
         }

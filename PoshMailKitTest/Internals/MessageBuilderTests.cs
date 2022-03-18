@@ -8,22 +8,22 @@ using Xunit;
 
 namespace PoshMailKitTest.Internals
 {
-    public class MailMessageTests
+    public class MessageBuilderTests
     {
         private MockRepository mockRepository;
 
 
 
-        public MailMessageTests()
+        public MessageBuilderTests()
         {
             this.mockRepository = new MockRepository(MockBehavior.Strict);
 
 
         }
 
-        private MailMessage CreateMailMessage()
+        private MessageBuilder CreateMailMessage()
         {
-            return new MailMessage();
+            return new MessageBuilder();
         }
 
         [Fact]
