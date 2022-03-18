@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Internals\DeliveryNotificationOptions.cs" />
     <Compile Include="Internals\Encoding.cs" />
     <Compile Include="Internals\FileProcessor.cs" />
     <Compile Include="Internals\MessageBuilder.cs" />

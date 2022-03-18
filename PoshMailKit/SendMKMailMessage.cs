@@ -6,6 +6,7 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit.Text;
 using PoshMailKit.Internals;
+using MailKit;
 
 namespace PoshMailKit
 {
@@ -57,6 +58,13 @@ namespace PoshMailKit
         [Parameter(ParameterSetName = "Legacy")]
         public SwitchParameter Legacy { get; set; }
 
+        // Legacy/Modern Delivery Notification Support
+        [Parameter(ParameterSetName = "Legacy")]
+        public DeliveryNotificationOptions DeliveryNotificationOption { get; set; }
+
+        [Parameter(ParameterSetName = "Modern")]
+        public DeliveryStatusNotification? DeliveryStatusNotification { get; set; }
+
         // Legacy/Modern Priority support
         [Parameter(ParameterSetName = "Legacy")]
         public MailPriority Priority { get; set; }
@@ -69,10 +77,10 @@ namespace PoshMailKit
         public Encoding Encoding { get; set; }
 
         [Parameter(ParameterSetName = "Modern")]
-        public System.Text.Encoding CharsetEncoding { get; set; }
+        public System.Text.Encoding CharsetEncoding { get; set; } = System.Text.Encoding.UTF8;
 
         [Parameter(ParameterSetName = "Modern")]
-        public ContentEncoding ContentTransferEncoding { get; set; }
+        public ContentEncoding ContentTransferEncoding { get; set; } = ContentEncoding.Base64;
         #endregion
 
         private MessageBuilder MailMessage { get; set; }
@@ -108,6 +116,7 @@ namespace PoshMailKit
                 SmtpServer = SmtpServer,
                 SmtpPort = Port,
                 Message = MailMessage.Message,
+                Notification = DeliveryStatusNotification,
             };
 
             processor.SendMailMessage();
@@ -128,6 +137,7 @@ namespace PoshMailKit
             {
                 SetLegacyPriority();
                 SetLegacyEncoding();
+                SetLegacyNotification();
             }
         }
 
@@ -217,6 +227,26 @@ namespace PoshMailKit
                 case Encoding.UTF32:
                     CharsetEncoding = System.Text.Encoding.UTF32;
                     ContentTransferEncoding = ContentEncoding.Base64;
+                    break;
+            }
+        }
+
+        private void SetLegacyNotification()
+        {
+            // Translate notification; default is null and does nothing
+            switch (DeliveryNotificationOption)
+            {
+                case DeliveryNotificationOptions.OnSuccess:
+                    DeliveryStatusNotification = MailKit.DeliveryStatusNotification.Success;
+                    break;
+                case DeliveryNotificationOptions.OnFailure:
+                    DeliveryStatusNotification = MailKit.DeliveryStatusNotification.Failure;
+                    break;
+                case DeliveryNotificationOptions.Delay:
+                    DeliveryStatusNotification = MailKit.DeliveryStatusNotification.Delay;
+                    break;
+                case DeliveryNotificationOptions.Never:
+                    DeliveryStatusNotification = MailKit.DeliveryStatusNotification.Never;
                     break;
             }
         }
