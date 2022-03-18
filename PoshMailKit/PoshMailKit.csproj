@@ -65,6 +65,8 @@
     <Compile Include="Internals\MessageBuilder.cs" />
     <Compile Include="Internals\MailPriority.cs" />
     <Compile Include="Internals\MimeMap.cs" />
+    <Compile Include="Internals\PMKSmtpClient.cs" />
+    <Compile Include="Internals\SmtpProcessor.cs" />
     <Compile Include="SendMKMailMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
