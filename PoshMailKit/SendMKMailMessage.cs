@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Management.Automation;
 using MimeKit;
-using MailKit.Net.Smtp;
-using MailKit.Security;
 using MimeKit.Text;
 using PoshMailKit.Internals;
 using MailKit;
