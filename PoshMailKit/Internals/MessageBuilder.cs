@@ -58,7 +58,7 @@ namespace PoshMailKit.Internals
 
         public void AddAttachments(List<MimePart> filesToAttach)
         {
-            if (filesToAttach.Count > 0)
+            if (filesToAttach != null && filesToAttach.Count > 0)
             {
                 if (MultipartMailBody == null)
                 {
