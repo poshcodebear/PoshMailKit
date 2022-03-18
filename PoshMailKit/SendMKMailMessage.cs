@@ -59,7 +59,7 @@ namespace PoshMailKit
 
         // Legacy/Modern Priority support
         [Parameter(ParameterSetName = "Legacy")]
-        public Internals.MailPriority Priority { get; set; }
+        public MailPriority Priority { get; set; }
 
         [Parameter(ParameterSetName = "Modern")]
         public MessagePriority MessagePriority { get; set; } = MessagePriority.Normal;
@@ -75,25 +75,34 @@ namespace PoshMailKit
         public ContentEncoding ContentTransferEncoding { get; set; }
         #endregion
 
-        private MimeMessage Message { get; set; }
-        private Multipart MultipartMailBody { get; set; }
-        private TextPart MailBody { get; set; }
+        private MessageBuilder MailMessage { get; set; }
         private List<MimePart> FilesToAttach { get; set; }
-        private TextFormat Format
+        private TextFormat BodyFormat
         { 
             get { return BodyAsHtml ? TextFormat.Html : TextFormat.Plain; }
         }
 
         protected override void BeginProcessing()
         {
-            ProcessAttachments();
             ProcessParameterSets();
+            ProcessAttachments();
         }
 
         protected override void ProcessRecord()
         {
-            GenerateMailMessage();
-            GenerateMailBody();
+            MailMessage = new MessageBuilder
+            {
+                Subject = Subject,
+                Priority = MessagePriority,
+                From = From,
+                To = To ?? null,
+                Cc = Cc ?? null,
+                Bcc = Bcc ?? null,
+            };
+
+            MailMessage.NewMailBody(BodyFormat, CharsetEncoding, Body, ContentTransferEncoding);
+            MailMessage.AddAttachments(FilesToAttach);
+
             SendMailMessage();
         }
 
@@ -119,18 +128,29 @@ namespace PoshMailKit
         {
             string workingDirectory = SessionState.Path.CurrentFileSystemLocation.Path;
             FileProcessor fileProcessor = new FileProcessor(workingDirectory);
+
             FilesToAttach = new List<MimePart>();
 
             if (Attachments != null)
-                foreach (string attachment in Attachments)
-                    FilesToAttach.Add(fileProcessor.GetFileMimePart(attachment));
+            {
+                ContentDispositionType attachmentContent = ContentDispositionType.Attachment;
+                foreach (string file in Attachments)
+                {
+                    MimePart fileMimePart = fileProcessor.GetFileMimePart(file, attachmentContent);
+                    FilesToAttach.Add(fileMimePart);
+                }
+            }
 
             if (InlineAttachments != null)
-                foreach (string lable in InlineAttachments.Keys)
-                    FilesToAttach.Add(fileProcessor.GetFileMimePart(
-                        (string)InlineAttachments[lable],
-                        new ContentDisposition(ContentDisposition.Inline),
-                        lable));
+            {
+                ContentDispositionType inlineContent = ContentDispositionType.Inline;
+                foreach (string label in InlineAttachments.Keys)
+                {
+                    string file = (string)InlineAttachments[label];
+                    MimePart fileMimePart = fileProcessor.GetFileMimePart(file, inlineContent, label);
+                    FilesToAttach.Add(fileMimePart);
+                }
+            }
         }
 
         private void SetLegacyPriority()
@@ -194,47 +214,6 @@ namespace PoshMailKit
             }
         }
 
-        private void GenerateMailBody()
-        {
-            MailBody = new TextPart(Format);
-            MailBody.SetText(CharsetEncoding, Body);
-            MailBody.ContentTransferEncoding = ContentTransferEncoding;
-
-            if (FilesToAttach.Count > 0)
-            {
-                MultipartMailBody = new Multipart("mixed");
-                foreach (MimePart attachment in FilesToAttach)
-                    MultipartMailBody.Add(attachment);
-                MultipartMailBody.Add(MailBody);
-
-                Message.Body = MultipartMailBody;
-            }
-            else
-                Message.Body = MailBody;
-        }
-        
-        private void GenerateMailMessage()
-        {
-            Message = new MimeMessage
-            {
-                Subject = Subject ?? null,
-                Priority = MessagePriority,
-            };
-
-            Message.From.Add(new MailboxAddress("", From));
-
-            foreach (string toMail in To)
-                Message.To.Add(new MailboxAddress("", toMail));
-
-            if (Cc != null)
-                foreach (string ccMail in Cc)
-                    Message.Cc.Add(new MailboxAddress("", ccMail));
-
-            if (Bcc != null)
-                foreach (string bccMail in Bcc)
-                    Message.Bcc.Add(new MailboxAddress("", bccMail));
-        }
-
         private void SendMailMessage()
         {
             using (SmtpClient client = new SmtpClient())
@@ -246,7 +225,7 @@ namespace PoshMailKit
                 // Note: only needed if the SMTP server requires authentication
                 //client.Authenticate("joey", "password");
 
-                client.Send(Message);
+                client.Send(MailMessage.Message);
                 client.Disconnect(true);
             }
         }
