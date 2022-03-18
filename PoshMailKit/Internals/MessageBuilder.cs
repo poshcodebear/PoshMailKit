@@ -37,7 +37,8 @@ namespace PoshMailKit.Internals
 
                 if (multipart != null)
                 {
-                    multipart.Add(TextMailBody);
+                    if (TextMailBody != null)
+                        multipart.Add(TextMailBody);
                     mimeMessage.Body = multipart;
                 }
                 else if (TextMailBody != null)
