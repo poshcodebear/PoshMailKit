@@ -4,6 +4,7 @@ using Moq;
 using PoshMailKit.Internals;
 using Xunit;
 using System.Threading;
+using System.Net;
 
 namespace PoshMailKitTest.Internals
 {
@@ -85,6 +86,32 @@ namespace PoshMailKitTest.Internals
             mockSmtpClient.Verify(mock => 
                 mock.Send(It.IsAny<MimeMessage>(), It.IsAny<CancellationToken>(), It.IsAny<ITransferProgress>()));
             
+            mockRepository.VerifyAll();
+        }
+
+        [Fact(Skip = "Not working")]
+        public void SendMailMessage_HasCredentialDefined_AuthenticatesWithCredential()
+        {
+            // Arrange
+            var mockSmtpClient = new Mock<PMKSmtpClient>();
+            var mockMimeMessage = new Mock<MimeMessage>();
+
+            var message = new MimeMessage();
+            var smtpServer = "test.smtp.local";
+            var smtpProcessor = CreateSmtpProcessor(mockSmtpClient.Object);
+            var credential = new NetworkCredential("testuser", "testpassword");
+
+            smtpProcessor.Message = message;
+            smtpProcessor.SmtpServer = smtpServer;
+            smtpProcessor.Credential = credential;
+
+            // Act
+            smtpProcessor.SendMailMessage();
+
+            // Assert
+            mockSmtpClient.Verify(mock =>
+                mock.Authenticate(It.IsAny<ICredentials>(), It.IsAny<CancellationToken>()));
+
             mockRepository.VerifyAll();
         }
     }
