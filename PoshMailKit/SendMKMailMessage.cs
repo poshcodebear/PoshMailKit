@@ -1,10 +1,11 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Management.Automation;
 using MimeKit;
 using MimeKit.Text;
 using PoshMailKit.Internals;
 using MailKit;
+using MailKit.Security;
 
 namespace PoshMailKit
 {
@@ -58,6 +59,13 @@ namespace PoshMailKit
         // Forces processing into Legacy mode
         [Parameter(ParameterSetName = "Legacy")]
         public SwitchParameter Legacy { get; set; }
+
+        // Legacy/Modern SSL/TLS
+        [Parameter(ParameterSetName = "Legacy")]
+        public SwitchParameter UseSsl { get; set; }
+
+        [Parameter(ParameterSetName = "Modern")]
+        public SecureSocketOptions SecureSocketOptions { get; set; } = SecureSocketOptions.Auto;
 
         // Legacy/Modern Delivery Notification Support
         [Parameter(ParameterSetName = "Legacy")]
@@ -117,6 +125,7 @@ namespace PoshMailKit
             {
                 SmtpServer = SmtpServer,
                 SmtpPort = Port,
+                SecureSocketOptions = SecureSocketOptions,
                 Message = MailMessage.Message,
                 Notification = DeliveryStatusNotification,
             };
@@ -137,6 +146,7 @@ namespace PoshMailKit
             }
             else if (ParameterSetName == "Legacy")
             {
+                SetLegacySsl();
                 SetLegacyPriority();
                 SetLegacyEncoding();
                 SetLegacyNotification();
@@ -170,6 +180,12 @@ namespace PoshMailKit
                     FilesToAttach.Add(fileMimePart);
                 }
             }
+        }
+
+        private void SetLegacySsl()
+        {
+            if (!UseSsl)
+                SecureSocketOptions = SecureSocketOptions.None;
         }
 
         private void SetLegacyPriority()
