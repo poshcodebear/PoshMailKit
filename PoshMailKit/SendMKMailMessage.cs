@@ -25,6 +25,9 @@ namespace PoshMailKit
         [Parameter]
         public string[] Bcc { get; set; }
 
+        [Parameter]
+        public string[] ReplyTo { get; set; }
+
         [Parameter(Position = 1)]
         public string Subject { get; set; }
 
@@ -104,6 +107,7 @@ namespace PoshMailKit
                 To = To ?? null,
                 Cc = Cc ?? null,
                 Bcc = Bcc ?? null,
+                ReplyTo = ReplyTo ?? null,
             };
 
             MailMessage.NewMailBody(BodyFormat, CharsetEncoding, Body, ContentTransferEncoding);
