@@ -27,6 +27,10 @@ namespace PoshMailKit.Internals
                 if (value != null)
                     foreach (var v in value)
                         message.Bcc.Add(GetMailboxAddressObj(v)); } }
+        public string[] ReplyTo { set {
+                if (value != null)
+                    foreach (var v in value)
+                        message.ReplyTo.Add(GetMailboxAddressObj(v)); } }
 
         public MimeMessage Message
         {
