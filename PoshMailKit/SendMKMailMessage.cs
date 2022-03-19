@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Management.Automation;
 using MimeKit;
@@ -11,49 +11,81 @@ namespace PoshMailKit
 {
     [Cmdlet(
         VerbsCommunications.Send, "MKMailMessage",
-        DefaultParameterSetName = "Default")]
+        DefaultParameterSetName = "Modern")]
     public class SendMKMailMessage : PSCmdlet
     {
         #region Cmdlet parameters
         [Parameter(
+            ParameterSetName = "Modern",
+            Mandatory = true,
+            Position = 0)]
+        [Parameter(
+            ParameterSetName = "Legacy",
             Mandatory = true,
             Position = 0)]
         public string[] To { get; set; }
 
-        [Parameter]
+        [Parameter(ParameterSetName = "Modern")]
+        [Parameter(ParameterSetName = "Legacy")]
         public string[] Cc { get; set; }
 
-        [Parameter]
+        [Parameter(ParameterSetName = "Modern")]
+        [Parameter(ParameterSetName = "Legacy")]
         public string[] Bcc { get; set; }
 
-        [Parameter]
+        [Parameter(ParameterSetName = "Modern")]
+        [Parameter(ParameterSetName = "Legacy")]
         public string[] ReplyTo { get; set; }
 
-        [Parameter(Position = 1)]
+        [Parameter(
+            ParameterSetName = "Modern",
+            Position = 1)]
+        [Parameter(
+            ParameterSetName = "Legacy",
+            Position = 1)]
         public string Subject { get; set; }
 
-        [Parameter(Position = 2)]
+        [Parameter(
+            ParameterSetName = "Modern",
+            Position = 2)]
+        [Parameter(
+            ParameterSetName = "Legacy",
+            Position = 2)]
         public string Body { get; set; }
 
-        [Parameter]
+        [Parameter(ParameterSetName = "Modern")]
+        [Parameter(ParameterSetName = "Legacy")]
         public SwitchParameter BodyAsHtml { get; set; }
 
-        [Parameter]
+        [Parameter(ParameterSetName = "Modern")]
+        [Parameter(ParameterSetName = "Legacy")]
         public string[] Attachments { get; set; }
 
-        [Parameter]
+        [Parameter(ParameterSetName = "Modern")]
+        [Parameter(ParameterSetName = "Legacy")]
         public Hashtable InlineAttachments { get; set; }
 
         // Note: Send-MailMessage does not require this if variable $PSEmailServer is set; should support this ultimately
         [Parameter(
+            ParameterSetName = "Modern",
+            Mandatory = true,
+            Position = 3)]
+        [Parameter(
+            ParameterSetName = "Legacy",
             Mandatory = true,
             Position = 3)]
         public string SmtpServer { get; set; }
         
-        [Parameter(Mandatory = true)]
+        [Parameter(
+            ParameterSetName = "Modern",
+            Mandatory = true)]
+        [Parameter(
+            ParameterSetName = "Legacy",
+            Mandatory = true)]
         public string From { get; set; }
 
-        [Parameter]
+        [Parameter(ParameterSetName = "Modern")]
+        [Parameter(ParameterSetName = "Legacy")]
         public int Port { get; set; } = 25;
 
         // Forces processing into Legacy mode
@@ -135,16 +167,7 @@ namespace PoshMailKit
 
         private void ProcessParameterSets()
         {
-            if (ParameterSetName == "Default")
-            {
-                MessagePriority = MessagePriority.Normal;
-
-                // Send-MailMessage default encoding is ASCII, but if not explicitly in Legacy mode, default to UTF-8 w/BOM
-                // Not sure if this is a good idea for a default or not; ASCII is probably at least a bit more universally supported
-                CharsetEncoding = System.Text.Encoding.UTF8;
-                ContentTransferEncoding = ContentEncoding.Base64;
-            }
-            else if (ParameterSetName == "Legacy")
+            if (ParameterSetName == "Legacy")
             {
                 SetLegacySsl();
                 SetLegacyPriority();
