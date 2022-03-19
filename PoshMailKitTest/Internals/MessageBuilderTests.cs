@@ -2,7 +2,6 @@
 using MimeKit.Text;
 using Moq;
 using PoshMailKit.Internals;
-using System;
 using System.Linq;
 using System.Collections.Generic;
 using Xunit;
