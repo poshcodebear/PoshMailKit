@@ -17,7 +17,7 @@ namespace PoshMailKit.Internals
         {
             Client = client;
             SmtpPort = 25;
-            SecureSocketOptions = SecureSocketOptions.None;
+            SecureSocketOptions = SecureSocketOptions.Auto;
         }
 
         public SmtpProcessor()
