@@ -6,6 +6,7 @@ using MimeKit.Text;
 using PoshMailKit.Internals;
 using MailKit;
 using MailKit.Security;
+using System.Net;
 
 namespace PoshMailKit
 {
@@ -88,6 +89,10 @@ namespace PoshMailKit
         [Parameter(ParameterSetName = "Legacy")]
         public int Port { get; set; } = 25;
 
+        [Parameter(ParameterSetName = "Modern")]
+        [Parameter(ParameterSetName = "Legacy")]
+        public PSCredential Credential { get; set; }
+
         // Forces processing into Legacy mode
         [Parameter(ParameterSetName = "Legacy")]
         public SwitchParameter Legacy { get; set; }
@@ -161,6 +166,9 @@ namespace PoshMailKit
                 Message = MailMessage.Message,
                 Notification = DeliveryStatusNotification,
             };
+
+            if (Credential != null)
+                processor.Credential = (NetworkCredential)Credential;
 
             processor.SendMailMessage();
         }
