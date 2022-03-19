@@ -1,6 +1,7 @@
 ﻿using MimeKit;
 using MailKit.Security;
 using MailKit;
+using System.Net;
 
 namespace PoshMailKit.Internals
 {
@@ -12,6 +13,7 @@ namespace PoshMailKit.Internals
         public PMKSmtpClient Client { get; set; }
         public DeliveryStatusNotification? Notification { get; set; }
         public SecureSocketOptions SecureSocketOptions { get; set; }
+        public NetworkCredential Credential { get; set; }
 
         public SmtpProcessor(PMKSmtpClient client)
         {
@@ -30,27 +32,11 @@ namespace PoshMailKit.Internals
             if (SmtpServer != null && Message != null)
             {
                 Client.Connect(SmtpServer, SmtpPort, SecureSocketOptions);
+                if (Credential != null)
+                    Client.Authenticate(Credential);
                 Client.Send(Message);
                 Client.Disconnect(true);
             }
         }
-
-        // Leaving here temporarily while implementing more functionality
-        /*public static void SendMailMessage(string smtpServer, int port, MimeMessage message)
-        {
-            using (PMKSmtpClient client = new PMKSmtpClient())
-            {
-                //SecureSocketOptions secureSocketOptions = SecureSocketOptions.None;
-                //client.Connect(SmtpServer, Port, secureSocketOptions);
-
-                client.Connect(smtpServer, port, SecureSocketOptions.None);                
-
-                // Note: only needed if the SMTP server requires authentication
-                //client.Authenticate("joey", "password");
-
-                client.Send(message);
-                client.Disconnect(true);
-            }
-        }*/
     }
 }
