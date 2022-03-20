@@ -20,56 +20,90 @@ namespace PoshMailKit
 
         #region Parameters for all sets
         [Alias("PsPath")]
-        [Parameter(ParameterSetName = "Modern")]
-        [Parameter(ParameterSetName = "Legacy")]
+        [Parameter(
+            ParameterSetName = "Modern",
+            ValueFromPipeline = true,
+            ValueFromPipelineByPropertyName = true)]
+        [Parameter(
+            ParameterSetName = "Legacy",
+            ValueFromPipeline = true,
+            ValueFromPipelineByPropertyName = true)]
         public string[]
             Attachments { get; set; }
 
-        [Parameter(ParameterSetName = "Modern")]
-        [Parameter(ParameterSetName = "Legacy")]
+        [Parameter(
+            ParameterSetName = "Modern",
+            ValueFromPipelineByPropertyName = true)]
+        [Parameter(
+            ParameterSetName = "Legacy",
+            ValueFromPipelineByPropertyName = true)]
         public string[]
             Bcc { get; set; }
 
         [Parameter(
             ParameterSetName = "Modern",
+            ValueFromPipelineByPropertyName = true,
             Position = 2)]
         [Parameter(
             ParameterSetName = "Legacy",
+            ValueFromPipelineByPropertyName = true,
             Position = 2)]
         public string
             Body { get; set; }
 
-        [Parameter(ParameterSetName = "Modern")]
-        [Parameter(ParameterSetName = "Legacy")]
+        [Parameter
+            (ParameterSetName = "Modern",
+            ValueFromPipelineByPropertyName = true)]
+        [Parameter(
+            ParameterSetName = "Legacy",
+            ValueFromPipelineByPropertyName = true)]
         public string[]
             Cc { get; set; }
         
-        [Parameter(ParameterSetName = "Modern")]
-        [Parameter(ParameterSetName = "Legacy")]
+        [Parameter(
+            ParameterSetName = "Modern",
+            ValueFromPipelineByPropertyName = true)]
+        [Parameter(
+            ParameterSetName = "Legacy",
+            ValueFromPipelineByPropertyName = true)]
         public PSCredential
             Credential { get; set; }
 
         [Parameter(
             ParameterSetName = "Modern",
+            ValueFromPipelineByPropertyName = true,
             Mandatory = true)]
         [Parameter(
             ParameterSetName = "Legacy",
+            ValueFromPipelineByPropertyName = true,
             Mandatory = true)]
         public string
             From { get; set; }
 
-        [Parameter(ParameterSetName = "Modern")]
-        [Parameter(ParameterSetName = "Legacy")]
+        [Parameter(
+            ParameterSetName = "Modern",
+            ValueFromPipelineByPropertyName = true)]
+        [Parameter(
+            ParameterSetName = "Legacy",
+            ValueFromPipelineByPropertyName = true)]
         public Hashtable
             InlineAttachments { get; set; }
 
-        [Parameter(ParameterSetName = "Modern")]
-        [Parameter(ParameterSetName = "Legacy")]
+        [Parameter(
+            ParameterSetName = "Modern",
+            ValueFromPipelineByPropertyName = true)]
+        [Parameter(
+            ParameterSetName = "Legacy",
+            ValueFromPipelineByPropertyName = true)]
         public int
             Port { get; set; } = 25;
 
-        [Parameter(ParameterSetName = "Modern")]
-        [Parameter(ParameterSetName = "Legacy")]
+        [Parameter(
+            ParameterSetName = "Modern",
+            ValueFromPipelineByPropertyName = true)]
+        [Parameter(
+            ParameterSetName = "Legacy",
+            ValueFromPipelineByPropertyName = true)]
         public string[]
             ReplyTo { get; set; }
 
@@ -77,9 +111,11 @@ namespace PoshMailKit
         [Alias("ComputerName")]
         [Parameter(
             ParameterSetName = "Modern",
+            ValueFromPipelineByPropertyName = true,
             Position = 3)]
         [Parameter(
             ParameterSetName = "Legacy",
+            ValueFromPipelineByPropertyName = true,
             Position = 3)]
         public string
             SmtpServer { get; set; }
@@ -87,19 +123,23 @@ namespace PoshMailKit
         [Alias("sub")]
         [Parameter(
             ParameterSetName = "Modern",
+            ValueFromPipelineByPropertyName = true,
             Position = 1)]
         [Parameter(
             ParameterSetName = "Legacy",
+            ValueFromPipelineByPropertyName = true,
             Position = 1)]
         public string
             Subject { get; set; }
 
         [Parameter(
             ParameterSetName = "Modern",
+            ValueFromPipelineByPropertyName = true,
             Mandatory = true,
             Position = 0)]
         [Parameter(
             ParameterSetName = "Legacy",
+            ValueFromPipelineByPropertyName = true,
             Mandatory = true,
             Position = 0)]
         public string[]
@@ -108,67 +148,91 @@ namespace PoshMailKit
 
         #region Modern parameters
         // Legacy counterpart: -BodyAsHtml
-        [Parameter(ParameterSetName = "Modern")]
+        [Parameter(
+            ParameterSetName = "Modern",
+            ValueFromPipelineByPropertyName = true)]
         public TextFormat
             BodyFormat { get; set; } = TextFormat.Plain;
 
         // Legacy counterpart: -Encoding (for both -CharsetEncoding and -ContentTransferEncoding)
-        [Parameter(ParameterSetName = "Modern")]
+        [Parameter(
+            ParameterSetName = "Modern",
+            ValueFromPipelineByPropertyName = true)]
         public System.Text.Encoding
             CharsetEncoding { get; set; } = System.Text.Encoding.UTF8;
 
-        [Parameter(ParameterSetName = "Modern")]
+        [Parameter(
+            ParameterSetName = "Modern",
+            ValueFromPipelineByPropertyName = true)]
         public ContentEncoding
             ContentTransferEncoding { get; set; } = ContentEncoding.Base64;
 
         // Legacy counterpart: -DeliveryNotificationOptions
-        [Parameter(ParameterSetName = "Modern")]
+        [Parameter(
+            ParameterSetName = "Modern",
+            ValueFromPipelineByPropertyName = true)]
         public DeliveryStatusNotification?
             DeliveryStatusNotification { get; set; }
 
         // Legacy counterpart: -Priority
-        [Parameter(ParameterSetName = "Modern")]
+        [Parameter(
+            ParameterSetName = "Modern",
+            ValueFromPipelineByPropertyName = true)]
         public MessagePriority
             MessagePriority { get; set; } = MessagePriority.Normal;
 
         // Legacy counterpart: -UseSsl
-        [Parameter(ParameterSetName = "Modern")]
+        [Parameter(
+            ParameterSetName = "Modern",
+            ValueFromPipelineByPropertyName = true)]
         public SecureSocketOptions
             SecureSocketOptions { get; set; } = SecureSocketOptions.Auto;
         #endregion
 
         #region Legacy parameters
         // Forces processing into Legacy mode
-        [Parameter(ParameterSetName = "Legacy")]
+        [Parameter(
+            ParameterSetName = "Legacy",
+            ValueFromPipelineByPropertyName = true)]
         public SwitchParameter
             Legacy { get; set; }
 
         // Modern counterpart: -BodyFormat
         [Alias("BAH")]
-        [Parameter(ParameterSetName = "Legacy")]
+        [Parameter(
+            ParameterSetName = "Legacy",
+            ValueFromPipelineByPropertyName = true)]
         public SwitchParameter
             BodyAsHtml
         { get; set; }
 
         // Modern counterpart: -DeliveryStatusNotification
         [Alias("DNO")]
-        [Parameter(ParameterSetName = "Legacy")]
+        [Parameter(
+            ParameterSetName = "Legacy",
+            ValueFromPipelineByPropertyName = true)]
         public DeliveryNotificationOptions
             DeliveryNotificationOption { get; set; }
 
         // Modern counterparts: -CharsetEncoding and -ContentTransferEncoding
         [Alias("BE")]
-        [Parameter(ParameterSetName = "Legacy")]
+        [Parameter(
+            ParameterSetName = "Legacy",
+            ValueFromPipelineByPropertyName = true)]
         public Encoding
             Encoding { get; set; }
 
         // Modern counterpart: -MessagePriority
-        [Parameter(ParameterSetName = "Legacy")]
+        [Parameter(
+            ParameterSetName = "Legacy",
+            ValueFromPipelineByPropertyName = true)]
         public MailPriority
             Priority { get; set; }
 
         // Modern counterpart: -SecureSocketOptions
-        [Parameter(ParameterSetName = "Legacy")]
+        [Parameter(
+            ParameterSetName = "Legacy",
+            ValueFromPipelineByPropertyName = true)]
         public SwitchParameter
             UseSsl { get; set; }
         #endregion
