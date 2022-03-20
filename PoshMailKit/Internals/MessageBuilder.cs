@@ -1,4 +1,4 @@
-﻿using MimeKit;
+using MimeKit;
 using MimeKit.Text;
 using System.Collections.Generic;
 
@@ -56,7 +56,7 @@ namespace PoshMailKit.Internals
             message = new MimeMessage();
         }
 
-        private MailboxAddress GetMailboxAddressObj(string email)
+        public MailboxAddress GetMailboxAddressObj(string email)
         {
             return new MailboxAddress("", email);
         }
