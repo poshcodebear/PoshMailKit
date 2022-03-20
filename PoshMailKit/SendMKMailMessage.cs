@@ -39,11 +39,6 @@ namespace PoshMailKit
 
         [Parameter(ParameterSetName = "Modern")]
         [Parameter(ParameterSetName = "Legacy")]
-        public SwitchParameter
-            BodyAsHtml { get; set; }
-
-        [Parameter(ParameterSetName = "Modern")]
-        [Parameter(ParameterSetName = "Legacy")]
         public string[]
             Cc { get; set; }
         
@@ -110,6 +105,11 @@ namespace PoshMailKit
         #endregion
 
         #region Modern parameters
+        // Legacy counterpart: -BodyAsHtml
+        [Parameter(ParameterSetName = "Modern")]
+        public TextFormat
+            BodyFormat { get; set; } = TextFormat.Plain;
+
         // Legacy counterpart: -Encoding (for both -CharsetEncoding and -ContentTransferEncoding)
         [Parameter(ParameterSetName = "Modern")]
         public System.Text.Encoding
@@ -141,6 +141,12 @@ namespace PoshMailKit
         public SwitchParameter
             Legacy { get; set; }
 
+        // Modern counterpart: -BodyFormat
+        [Parameter(ParameterSetName = "Legacy")]
+        public SwitchParameter
+            BodyAsHtml
+        { get; set; }
+
         // Modern counterpart: -DeliveryStatusNotification
         [Parameter(ParameterSetName = "Legacy")]
         public DeliveryNotificationOptions
@@ -166,10 +172,6 @@ namespace PoshMailKit
 
         private MessageBuilder MailMessage { get; set; }
         private List<MimePart> FilesToAttach { get; set; }
-        private TextFormat BodyFormat
-        { 
-            get { return BodyAsHtml ? TextFormat.Html : TextFormat.Plain; }
-        }
 
         protected override void BeginProcessing()
         {
@@ -216,6 +218,7 @@ namespace PoshMailKit
                 SetLegacyPriority();
                 SetLegacyEncoding();
                 SetLegacyNotification();
+                SetLegacyBodyFormat();
             }
         }
 
@@ -333,6 +336,12 @@ namespace PoshMailKit
                     DeliveryStatusNotification = MailKit.DeliveryStatusNotification.Never;
                     break;
             }
+        }
+
+        private void SetLegacyBodyFormat()
+        {
+            if (BodyAsHtml)
+                BodyFormat = TextFormat.Html;
         }
     }
 }
