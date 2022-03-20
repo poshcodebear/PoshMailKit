@@ -1,4 +1,4 @@
-using MimeKit;
+﻿using MimeKit;
 using MimeKit.Text;
 using System.Collections.Generic;
 
@@ -58,7 +58,9 @@ namespace PoshMailKit.Internals
 
         public MailboxAddress GetMailboxAddressObj(string email)
         {
-            return new MailboxAddress("", email);
+            MailboxAddress mailboxAddress = new MailboxAddress("", email);
+            var _ = ((System.Net.Mail.MailAddress)mailboxAddress);
+            return mailboxAddress;
         }
 
         public void AddAttachments(List<MimePart> filesToAttach)
