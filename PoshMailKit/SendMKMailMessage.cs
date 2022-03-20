@@ -16,35 +16,18 @@ namespace PoshMailKit
     public class SendMKMailMessage : PSCmdlet
     {
         #region Cmdlet parameters
-        [Parameter(
-            ParameterSetName = "Modern",
-            Mandatory = true,
-            Position = 0)]
-        [Parameter(
-            ParameterSetName = "Legacy",
-            Mandatory = true,
-            Position = 0)]
-        public string[] To { get; set; }
+
+        #region Parameters for all sets
+        [Alias("PsPath")]
+        [Parameter(ParameterSetName = "Modern")]
+        [Parameter(ParameterSetName = "Legacy")]
+        public string[]
+            Attachments { get; set; }
 
         [Parameter(ParameterSetName = "Modern")]
         [Parameter(ParameterSetName = "Legacy")]
-        public string[] Cc { get; set; }
-
-        [Parameter(ParameterSetName = "Modern")]
-        [Parameter(ParameterSetName = "Legacy")]
-        public string[] Bcc { get; set; }
-
-        [Parameter(ParameterSetName = "Modern")]
-        [Parameter(ParameterSetName = "Legacy")]
-        public string[] ReplyTo { get; set; }
-
-        [Parameter(
-            ParameterSetName = "Modern",
-            Position = 1)]
-        [Parameter(
-            ParameterSetName = "Legacy",
-            Position = 1)]
-        public string Subject { get; set; }
+        public string[]
+            Bcc { get; set; }
 
         [Parameter(
             ParameterSetName = "Modern",
@@ -52,21 +35,45 @@ namespace PoshMailKit
         [Parameter(
             ParameterSetName = "Legacy",
             Position = 2)]
-        public string Body { get; set; }
+        public string
+            Body { get; set; }
 
         [Parameter(ParameterSetName = "Modern")]
         [Parameter(ParameterSetName = "Legacy")]
-        public SwitchParameter BodyAsHtml { get; set; }
+        public string[]
+            Cc { get; set; }
+        
+        [Parameter(ParameterSetName = "Modern")]
+        [Parameter(ParameterSetName = "Legacy")]
+        public PSCredential
+            Credential { get; set; }
+
+        [Parameter(
+            ParameterSetName = "Modern",
+            Mandatory = true)]
+        [Parameter(
+            ParameterSetName = "Legacy",
+            Mandatory = true)]
+        public string
+            From { get; set; }
 
         [Parameter(ParameterSetName = "Modern")]
         [Parameter(ParameterSetName = "Legacy")]
-        public string[] Attachments { get; set; }
+        public Hashtable
+            InlineAttachments { get; set; }
 
         [Parameter(ParameterSetName = "Modern")]
         [Parameter(ParameterSetName = "Legacy")]
-        public Hashtable InlineAttachments { get; set; }
+        public int
+            Port { get; set; } = 25;
+
+        [Parameter(ParameterSetName = "Modern")]
+        [Parameter(ParameterSetName = "Legacy")]
+        public string[]
+            ReplyTo { get; set; }
 
         // Note: Send-MailMessage does not require this if variable $PSEmailServer is set; should support this ultimately
+        [Alias("ComputerName")]
         [Parameter(
             ParameterSetName = "Modern",
             Mandatory = true,
@@ -75,66 +82,102 @@ namespace PoshMailKit
             ParameterSetName = "Legacy",
             Mandatory = true,
             Position = 3)]
-        public string SmtpServer { get; set; }
-        
+        public string
+            SmtpServer { get; set; }
+
+        [Alias("sub")]
         [Parameter(
             ParameterSetName = "Modern",
-            Mandatory = true)]
+            Position = 1)]
         [Parameter(
             ParameterSetName = "Legacy",
-            Mandatory = true)]
-        public string From { get; set; }
+            Position = 1)]
+        public string
+            Subject { get; set; }
+
+        [Parameter(
+            ParameterSetName = "Modern",
+            Mandatory = true,
+            Position = 0)]
+        [Parameter(
+            ParameterSetName = "Legacy",
+            Mandatory = true,
+            Position = 0)]
+        public string[]
+            To { get; set; }
+        #endregion
+
+        #region Modern parameters
+        // Legacy counterpart: -BodyAsHtml
+        [Parameter(ParameterSetName = "Modern")]
+        public TextFormat
+            BodyFormat { get; set; } = TextFormat.Plain;
+
+        // Legacy counterpart: -Encoding (for both -CharsetEncoding and -ContentTransferEncoding)
+        [Parameter(ParameterSetName = "Modern")]
+        public System.Text.Encoding
+            CharsetEncoding { get; set; } = System.Text.Encoding.UTF8;
 
         [Parameter(ParameterSetName = "Modern")]
-        [Parameter(ParameterSetName = "Legacy")]
-        public int Port { get; set; } = 25;
+        public ContentEncoding
+            ContentTransferEncoding { get; set; } = ContentEncoding.Base64;
 
+        // Legacy counterpart: -DeliveryNotificationOptions
         [Parameter(ParameterSetName = "Modern")]
-        [Parameter(ParameterSetName = "Legacy")]
-        public PSCredential Credential { get; set; }
+        public DeliveryStatusNotification?
+            DeliveryStatusNotification { get; set; }
 
+        // Legacy counterpart: -Priority
+        [Parameter(ParameterSetName = "Modern")]
+        public MessagePriority
+            MessagePriority { get; set; } = MessagePriority.Normal;
+
+        // Legacy counterpart: -UseSsl
+        [Parameter(ParameterSetName = "Modern")]
+        public SecureSocketOptions
+            SecureSocketOptions { get; set; } = SecureSocketOptions.Auto;
+        #endregion
+
+        #region Legacy parameters
         // Forces processing into Legacy mode
         [Parameter(ParameterSetName = "Legacy")]
-        public SwitchParameter Legacy { get; set; }
+        public SwitchParameter
+            Legacy { get; set; }
 
-        // Legacy/Modern SSL/TLS
+        // Modern counterpart: -BodyFormat
+        [Alias("BAH")]
         [Parameter(ParameterSetName = "Legacy")]
-        public SwitchParameter UseSsl { get; set; }
+        public SwitchParameter
+            BodyAsHtml
+        { get; set; }
 
-        [Parameter(ParameterSetName = "Modern")]
-        public SecureSocketOptions SecureSocketOptions { get; set; } = SecureSocketOptions.Auto;
-
-        // Legacy/Modern Delivery Notification Support
+        // Modern counterpart: -DeliveryStatusNotification
+        [Alias("DNO")]
         [Parameter(ParameterSetName = "Legacy")]
-        public DeliveryNotificationOptions DeliveryNotificationOption { get; set; }
+        public DeliveryNotificationOptions
+            DeliveryNotificationOption { get; set; }
 
-        [Parameter(ParameterSetName = "Modern")]
-        public DeliveryStatusNotification? DeliveryStatusNotification { get; set; }
-
-        // Legacy/Modern Priority support
+        // Modern counterparts: -CharsetEncoding and -ContentTransferEncoding
+        [Alias("BE")]
         [Parameter(ParameterSetName = "Legacy")]
-        public MailPriority Priority { get; set; }
+        public Encoding
+            Encoding { get; set; }
 
-        [Parameter(ParameterSetName = "Modern")]
-        public MessagePriority MessagePriority { get; set; } = MessagePriority.Normal;
-
-        // Legacy/Modern Encoding support
+        // Modern counterpart: -MessagePriority
         [Parameter(ParameterSetName = "Legacy")]
-        public Encoding Encoding { get; set; }
+        public MailPriority
+            Priority { get; set; }
 
-        [Parameter(ParameterSetName = "Modern")]
-        public System.Text.Encoding CharsetEncoding { get; set; } = System.Text.Encoding.UTF8;
+        // Modern counterpart: -SecureSocketOptions
+        [Parameter(ParameterSetName = "Legacy")]
+        public SwitchParameter
+            UseSsl { get; set; }
+        #endregion
 
-        [Parameter(ParameterSetName = "Modern")]
-        public ContentEncoding ContentTransferEncoding { get; set; } = ContentEncoding.Base64;
         #endregion
 
         private MessageBuilder MailMessage { get; set; }
         private List<MimePart> FilesToAttach { get; set; }
-        private TextFormat BodyFormat
-        { 
-            get { return BodyAsHtml ? TextFormat.Html : TextFormat.Plain; }
-        }
 
         protected override void BeginProcessing()
         {
@@ -181,6 +224,7 @@ namespace PoshMailKit
                 SetLegacyPriority();
                 SetLegacyEncoding();
                 SetLegacyNotification();
+                SetLegacyBodyFormat();
             }
         }
 
@@ -298,6 +342,12 @@ namespace PoshMailKit
                     DeliveryStatusNotification = MailKit.DeliveryStatusNotification.Never;
                     break;
             }
+        }
+
+        private void SetLegacyBodyFormat()
+        {
+            if (BodyAsHtml)
+                BodyFormat = TextFormat.Html;
         }
     }
 }
