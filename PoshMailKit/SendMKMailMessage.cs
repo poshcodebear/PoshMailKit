@@ -16,6 +16,8 @@ namespace PoshMailKit
     public class SendMKMailMessage : PSCmdlet
     {
         #region Cmdlet parameters
+
+        #region Parameters for all sets
         [Parameter(
             ParameterSetName = "Modern",
             Mandatory = true,
@@ -92,41 +94,51 @@ namespace PoshMailKit
         [Parameter(ParameterSetName = "Modern")]
         [Parameter(ParameterSetName = "Legacy")]
         public PSCredential Credential { get; set; }
+        #endregion
 
-        // Forces processing into Legacy mode
-        [Parameter(ParameterSetName = "Legacy")]
-        public SwitchParameter Legacy { get; set; }
-
-        // Legacy/Modern SSL/TLS
-        [Parameter(ParameterSetName = "Legacy")]
-        public SwitchParameter UseSsl { get; set; }
-
+        #region Modern parameters
+        // Legacy counterpart: -UseSsl
         [Parameter(ParameterSetName = "Modern")]
         public SecureSocketOptions SecureSocketOptions { get; set; } = SecureSocketOptions.Auto;
 
-        // Legacy/Modern Delivery Notification Support
-        [Parameter(ParameterSetName = "Legacy")]
-        public DeliveryNotificationOptions DeliveryNotificationOption { get; set; }
-
+        // Legacy counterpart: -DeliveryNotificationOptions
         [Parameter(ParameterSetName = "Modern")]
         public DeliveryStatusNotification? DeliveryStatusNotification { get; set; }
 
-        // Legacy/Modern Priority support
-        [Parameter(ParameterSetName = "Legacy")]
-        public MailPriority Priority { get; set; }
-
+        // Legacy counterpart: -Priority
         [Parameter(ParameterSetName = "Modern")]
         public MessagePriority MessagePriority { get; set; } = MessagePriority.Normal;
 
-        // Legacy/Modern Encoding support
-        [Parameter(ParameterSetName = "Legacy")]
-        public Encoding Encoding { get; set; }
-
+        // Legacy counterpart: -Encoding (for both -CharsetEncoding and -ContentTransferEncoding)
         [Parameter(ParameterSetName = "Modern")]
         public System.Text.Encoding CharsetEncoding { get; set; } = System.Text.Encoding.UTF8;
 
         [Parameter(ParameterSetName = "Modern")]
         public ContentEncoding ContentTransferEncoding { get; set; } = ContentEncoding.Base64;
+        #endregion
+
+        #region Legacy parameters
+        // Forces processing into Legacy mode
+        [Parameter(ParameterSetName = "Legacy")]
+        public SwitchParameter Legacy { get; set; }
+
+        // Modern counterpart: -SecureSocketOptions
+        [Parameter(ParameterSetName = "Legacy")]
+        public SwitchParameter UseSsl { get; set; }
+
+        // Modern counterpart: -DeliveryStatusNotification
+        [Parameter(ParameterSetName = "Legacy")]
+        public DeliveryNotificationOptions DeliveryNotificationOption { get; set; }
+
+        // Modern counterpart: -MessagePriority
+        [Parameter(ParameterSetName = "Legacy")]
+        public MailPriority Priority { get; set; }
+
+        // Modern counterparts: -CharsetEncoding and -ContentTransferEncoding
+        [Parameter(ParameterSetName = "Legacy")]
+        public Encoding Encoding { get; set; }
+        #endregion
+
         #endregion
 
         private MessageBuilder MailMessage { get; set; }
