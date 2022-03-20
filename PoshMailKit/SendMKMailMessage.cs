@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Management.Automation;
 using MimeKit;
@@ -18,6 +18,7 @@ namespace PoshMailKit
         #region Cmdlet parameters
 
         #region Parameters for all sets
+        [Alias("PsPath")]
         [Parameter(ParameterSetName = "Modern")]
         [Parameter(ParameterSetName = "Legacy")]
         public string[]
@@ -72,6 +73,7 @@ namespace PoshMailKit
             ReplyTo { get; set; }
 
         // Note: Send-MailMessage does not require this if variable $PSEmailServer is set; should support this ultimately
+        [Alias("ComputerName")]
         [Parameter(
             ParameterSetName = "Modern",
             Mandatory = true,
@@ -83,6 +85,7 @@ namespace PoshMailKit
         public string
             SmtpServer { get; set; }
 
+        [Alias("sub")]
         [Parameter(
             ParameterSetName = "Modern",
             Position = 1)]
@@ -142,17 +145,20 @@ namespace PoshMailKit
             Legacy { get; set; }
 
         // Modern counterpart: -BodyFormat
+        [Alias("BAH")]
         [Parameter(ParameterSetName = "Legacy")]
         public SwitchParameter
             BodyAsHtml
         { get; set; }
 
         // Modern counterpart: -DeliveryStatusNotification
+        [Alias("DNO")]
         [Parameter(ParameterSetName = "Legacy")]
         public DeliveryNotificationOptions
             DeliveryNotificationOption { get; set; }
 
         // Modern counterparts: -CharsetEncoding and -ContentTransferEncoding
+        [Alias("BE")]
         [Parameter(ParameterSetName = "Legacy")]
         public Encoding
             Encoding { get; set; }
