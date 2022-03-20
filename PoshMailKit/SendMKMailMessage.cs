@@ -7,6 +7,7 @@ using PoshMailKit.Internals;
 using MailKit;
 using MailKit.Security;
 using System.Net;
+using System;
 
 namespace PoshMailKit
 {
@@ -76,11 +77,9 @@ namespace PoshMailKit
         [Alias("ComputerName")]
         [Parameter(
             ParameterSetName = "Modern",
-            Mandatory = true,
             Position = 3)]
         [Parameter(
             ParameterSetName = "Legacy",
-            Mandatory = true,
             Position = 3)]
         public string
             SmtpServer { get; set; }
@@ -181,7 +180,7 @@ namespace PoshMailKit
 
         protected override void BeginProcessing()
         {
-            ProcessParameterSets();
+            ProcessParameters();
             ProcessAttachments();
         }
 
@@ -216,8 +215,19 @@ namespace PoshMailKit
             processor.SendMailMessage();
         }
 
-        private void ProcessParameterSets()
+        private void ProcessParameters()
         {
+            if (string.IsNullOrEmpty(SmtpServer))
+                SmtpServer = (string)SessionState.PSVariable.Get("PSEmailServer").Value;
+            if (string.IsNullOrEmpty(SmtpServer))
+            {
+                string errorMessage = "The email cannot be sent because no SMTP server was specified. " +
+                    "You must specify an SMTP server by using either the SmtpServer parameter or the $PSEmailServer variable.";
+                InvalidOperationException exception = new InvalidOperationException(errorMessage);
+                ErrorRecord errorRecord = new ErrorRecord(exception, "", ErrorCategory.InvalidArgument, null);
+                ThrowTerminatingError(errorRecord);
+            }
+
             if (ParameterSetName == "Legacy")
             {
                 SetLegacySsl();
