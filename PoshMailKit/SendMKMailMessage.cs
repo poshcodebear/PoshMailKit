@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Management.Automation;
 using MimeKit;
@@ -26,19 +26,23 @@ namespace PoshMailKit
             ParameterSetName = "Legacy",
             Mandatory = true,
             Position = 0)]
-        public string[] To { get; set; }
+        public string[]
+            To { get; set; }
 
         [Parameter(ParameterSetName = "Modern")]
         [Parameter(ParameterSetName = "Legacy")]
-        public string[] Cc { get; set; }
+        public string[]
+            Cc { get; set; }
 
         [Parameter(ParameterSetName = "Modern")]
         [Parameter(ParameterSetName = "Legacy")]
-        public string[] Bcc { get; set; }
+        public string[]
+            Bcc { get; set; }
 
         [Parameter(ParameterSetName = "Modern")]
         [Parameter(ParameterSetName = "Legacy")]
-        public string[] ReplyTo { get; set; }
+        public string[]
+            ReplyTo { get; set; }
 
         [Parameter(
             ParameterSetName = "Modern",
@@ -46,7 +50,8 @@ namespace PoshMailKit
         [Parameter(
             ParameterSetName = "Legacy",
             Position = 1)]
-        public string Subject { get; set; }
+        public string
+            Subject { get; set; }
 
         [Parameter(
             ParameterSetName = "Modern",
@@ -54,19 +59,23 @@ namespace PoshMailKit
         [Parameter(
             ParameterSetName = "Legacy",
             Position = 2)]
-        public string Body { get; set; }
+        public string
+            Body { get; set; }
 
         [Parameter(ParameterSetName = "Modern")]
         [Parameter(ParameterSetName = "Legacy")]
-        public SwitchParameter BodyAsHtml { get; set; }
+        public SwitchParameter
+            BodyAsHtml { get; set; }
 
         [Parameter(ParameterSetName = "Modern")]
         [Parameter(ParameterSetName = "Legacy")]
-        public string[] Attachments { get; set; }
+        public string[]
+            Attachments { get; set; }
 
         [Parameter(ParameterSetName = "Modern")]
         [Parameter(ParameterSetName = "Legacy")]
-        public Hashtable InlineAttachments { get; set; }
+        public Hashtable
+            InlineAttachments { get; set; }
 
         // Note: Send-MailMessage does not require this if variable $PSEmailServer is set; should support this ultimately
         [Parameter(
@@ -77,7 +86,8 @@ namespace PoshMailKit
             ParameterSetName = "Legacy",
             Mandatory = true,
             Position = 3)]
-        public string SmtpServer { get; set; }
+        public string
+            SmtpServer { get; set; }
         
         [Parameter(
             ParameterSetName = "Modern",
@@ -85,58 +95,71 @@ namespace PoshMailKit
         [Parameter(
             ParameterSetName = "Legacy",
             Mandatory = true)]
-        public string From { get; set; }
+        public string
+            From { get; set; }
 
         [Parameter(ParameterSetName = "Modern")]
         [Parameter(ParameterSetName = "Legacy")]
-        public int Port { get; set; } = 25;
+        public int
+            Port { get; set; } = 25;
 
         [Parameter(ParameterSetName = "Modern")]
         [Parameter(ParameterSetName = "Legacy")]
-        public PSCredential Credential { get; set; }
+        public PSCredential
+            Credential { get; set; }
         #endregion
 
         #region Modern parameters
         // Legacy counterpart: -UseSsl
         [Parameter(ParameterSetName = "Modern")]
-        public SecureSocketOptions SecureSocketOptions { get; set; } = SecureSocketOptions.Auto;
+        public SecureSocketOptions
+            SecureSocketOptions { get; set; } = SecureSocketOptions.Auto;
 
         // Legacy counterpart: -DeliveryNotificationOptions
         [Parameter(ParameterSetName = "Modern")]
-        public DeliveryStatusNotification? DeliveryStatusNotification { get; set; }
+        public DeliveryStatusNotification?
+            DeliveryStatusNotification { get; set; }
 
         // Legacy counterpart: -Priority
         [Parameter(ParameterSetName = "Modern")]
-        public MessagePriority MessagePriority { get; set; } = MessagePriority.Normal;
+        public MessagePriority
+            MessagePriority { get; set; } = MessagePriority.Normal;
 
         // Legacy counterpart: -Encoding (for both -CharsetEncoding and -ContentTransferEncoding)
         [Parameter(ParameterSetName = "Modern")]
-        public System.Text.Encoding CharsetEncoding { get; set; } = System.Text.Encoding.UTF8;
+        public System.Text.Encoding
+            CharsetEncoding { get; set; } = System.Text.Encoding.UTF8;
 
         [Parameter(ParameterSetName = "Modern")]
-        public ContentEncoding ContentTransferEncoding { get; set; } = ContentEncoding.Base64;
+        public ContentEncoding
+            ContentTransferEncoding { get; set; } = ContentEncoding.Base64;
         #endregion
 
         #region Legacy parameters
         // Forces processing into Legacy mode
         [Parameter(ParameterSetName = "Legacy")]
-        public SwitchParameter Legacy { get; set; }
+        public SwitchParameter
+            Legacy { get; set; }
 
         // Modern counterpart: -SecureSocketOptions
         [Parameter(ParameterSetName = "Legacy")]
-        public SwitchParameter UseSsl { get; set; }
+        public SwitchParameter
+            UseSsl { get; set; }
 
         // Modern counterpart: -DeliveryStatusNotification
         [Parameter(ParameterSetName = "Legacy")]
-        public DeliveryNotificationOptions DeliveryNotificationOption { get; set; }
+        public DeliveryNotificationOptions
+            DeliveryNotificationOption { get; set; }
 
         // Modern counterpart: -MessagePriority
         [Parameter(ParameterSetName = "Legacy")]
-        public MailPriority Priority { get; set; }
+        public MailPriority
+            Priority { get; set; }
 
         // Modern counterparts: -CharsetEncoding and -ContentTransferEncoding
         [Parameter(ParameterSetName = "Legacy")]
-        public Encoding Encoding { get; set; }
+        public Encoding
+            Encoding { get; set; }
         #endregion
 
         #endregion
