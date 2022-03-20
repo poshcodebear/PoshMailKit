@@ -5,6 +5,7 @@ using PoshMailKit.Internals;
 using System.Linq;
 using System.Collections.Generic;
 using Xunit;
+using System;
 
 namespace PoshMailKitTest.Internals
 {
@@ -231,6 +232,65 @@ namespace PoshMailKitTest.Internals
                 $"Message body: actual '{message.TextBody}', expected '{body}'");
             Assert.True(bodyTextPart.ContentTransferEncoding == contentTransferEncoding,
                 $"ContentTransferEncoding: actual '{bodyTextPart.ContentTransferEncoding}', expected '{contentTransferEncoding}'");
+
+            mockRepository.VerifyAll();
+        }
+
+        [Fact]
+        public void GetMailboxAddressObj_ValidEmailAddressOnly_ReturnsSimpleEmailAddress()
+        {
+            // Arrange
+            var messageBuilder = CreateMessageBuilder();
+            var emailAddress = "test@email.com";
+
+            // Act
+            var mailboxAddressObj = messageBuilder.GetMailboxAddressObj(emailAddress);
+
+            // Assert
+            Assert.Equal(mailboxAddressObj.Address, emailAddress);
+
+            mockRepository.VerifyAll();
+        }
+
+        [Fact]
+        public void GetMailboxAddressObj_InvalidEmailAddress_ThrowsFormatExceptionError()
+        {
+            // Arrange
+            var messageBuilder = CreateMessageBuilder();
+            var emailAddress = "test?email.com";
+
+            // Act & Assert
+            try
+            {
+                var _ = messageBuilder.GetMailboxAddressObj(emailAddress);
+                Assert.False(true,
+                    $"Exception expected but not thrown");
+            }
+            catch(Exception e)
+            {
+                Assert.True(e is FormatException,
+                    $"FormatException expected, actual exception thrown: {e.GetType()}");
+            }
+
+            mockRepository.VerifyAll();
+        }
+
+        [Fact]
+        public void GetMailboxAddressObj_ValidEmailAddressWithDisplayName_ReturnsCompoundEmailAddress()
+        {
+            // Arrange
+            var messageBuilder = CreateMessageBuilder();
+            var emailAddress = "test@email.com";
+            var displayName = "Testy McTesterson";
+
+            var compoundAddress = $"{displayName} <{emailAddress}>";
+
+            // Act
+            var mailboxAddressObj = messageBuilder.GetMailboxAddressObj(compoundAddress);
+
+            // Assert
+            Assert.Equal(mailboxAddressObj.Address, emailAddress);
+            Assert.Equal(mailboxAddressObj.Name, displayName);
 
             mockRepository.VerifyAll();
         }
