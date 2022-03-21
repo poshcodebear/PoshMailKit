@@ -1,0 +1,650 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<helpItems schema="maml" xmlns="http://msh">
+    <command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+        <details>
+            <name>Send-MKMailMessage</name>
+            <verb>Send</verb>
+            <noun>MKMailMessage</noun>
+            <description>
+                <para>Sends an email message to an SMTP server.</para>
+            </description>
+        </details>
+        <description>
+            <para>The Send-MKMailMessage cmdlet sends an email message from within PowerShell.</para>
+            <para>It supports the mechanisms needed to make and send most kinds of email and can communicate with mail servers using most modern supported security protols.</para>
+            <para>Send-MKMailMessage is designed to be a drop-in replacement of Send-MailMessage, which uses the deprecated System.Net.Mail.SmtpClient class and does not guarantee secure connections to SMTP servers. It uses the cross-platform mail client library MailKit (https://github.com/jstedfast/MailKit) to replace the functionality from System.Net.Mail.SmtpClient.</para>
+        </description>
+        <syntax>
+            <syntaxItem> <!-- Modern -->
+                <name>Send-MKMailMessage</name>
+                <parameter required="true" globbing="false" pipelineInput="true (ByPropertyName)" position="0">
+                    <name>To</name>
+                    <parameterValue required="true">string[]</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="1">
+                    <name>Subject</name>
+                    <parameterValue required="true">string</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="2">
+                    <name>Body</name>
+                    <parameterValue required="true">string</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="3">
+                    <name>SmtpServer</name>
+                    <parameterValue required="true">string</parameterValue>
+                </parameter>
+                <parameter required="true" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>From</name>
+                    <parameterValue required="true">string</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByValue, ByPropertyName)" position="named">
+                    <name>Attachments</name>
+                    <parameterValue required="true">string[]</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>Bcc</name>
+                    <parameterValue required="true">string[]</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>Cc</name>
+                    <parameterValue required="true">string[]</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>CharsetEncoding</name>
+                    <parameterValue>System.Text.Encoding</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>ContentTransferEncoding</name>
+                    <parameterValueGroup>
+                        <parameterValue>Base64</parameterValue>
+                        <parameterValue>Binary</parameterValue>
+                        <parameterValue>Default</parameterValue>
+                        <parameterValue>EightBit</parameterValue>
+                        <parameterValue>QuotedPrintable</parameterValue>
+                        <parameterValue>SevenBit</parameterValue>
+                        <parameterValue>UUEncode</parameterValue>
+                    </parameterValueGroup>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>Credential</name>
+                    <parameterValue required="true">PSCredential</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>DeliveryStatusNotification</name>
+                    <parameterValueGroup>
+                        <parameterValue>Never</parameterValue>
+                        <parameterValue>Success</parameterValue>
+                        <parameterValue>Failure</parameterValue>
+                        <parameterValue>Delay</parameterValue>
+                    </parameterValueGroup>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>InlineAttachments</name>
+                    <parameterValue required="true">Hashtable</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>MessagePriority</name>
+                    <parameterValueGroup>
+                        <parameterValue>Normal</parameterValue>
+                        <parameterValue>Urgent</parameterValue>
+                        <parameterValue>NonUrgent</parameterValue>
+                    </parameterValueGroup>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>Port</name>
+                    <parameterValue required="true">int</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>ReplyTo</name>
+                    <parameterValue required="true">string[]</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>SecureSocketOptions</name>
+                    <parameterValueGroup>
+                        <parameterValue>None</parameterValue>
+                        <parameterValue>Auto</parameterValue>
+                        <parameterValue>SslOnConnect</parameterValue>
+                        <parameterValue>StartTls</parameterValue>
+                        <parameterValue>StartTlsWhenAvailable</parameterValue>
+                    </parameterValueGroup>
+                </parameter>
+            </syntaxItem>
+            <syntaxItem> <!-- Legacy -->
+                <name>Send-MKMailMessage</name>
+                <parameter required="true" globbing="false" pipelineInput="true (ByPropertyName)" position="0">
+                    <name>To</name>
+                    <parameterValue required="true">string[]</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="1">
+                    <name>Subject</name>
+                    <parameterValue required="true">string</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="2">
+                    <name>Body</name>
+                    <parameterValue required="true">string</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="3">
+                    <name>SmtpServer</name>
+                    <parameterValue required="true">string</parameterValue>
+                </parameter>
+                <parameter required="true" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>From</name>
+                    <parameterValue required="true">string</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>Legacy</name>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByValue, ByPropertyName)" position="named">
+                    <name>Attachments</name>
+                    <parameterValue required="true">string[]</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>Bcc</name>
+                    <parameterValue required="true">string[]</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>BodyAsHtml</name>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>Cc</name>
+                    <parameterValue required="true">string[]</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>Credential</name>
+                    <parameterValue required="true">PSCredential</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>DeliveryNotificationOption</name>
+                    <parameterValueGroup>
+                        <parameterValue>None</parameterValue>
+                        <parameterValue>OnSuccess</parameterValue>
+                        <parameterValue>OnFailure</parameterValue>
+                        <parameterValue>Delay</parameterValue>
+                        <parameterValue>Never</parameterValue>
+                    </parameterValueGroup>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>Encoding</name>
+                    <parameterValueGroup>
+                        <parameterValue>ASCII</parameterValue>
+                        <parameterValue>BigEndianUnicode</parameterValue>
+                        <parameterValue>Default</parameterValue>
+                        <parameterValue>OEM</parameterValue>
+                        <parameterValue>Unicode</parameterValue>
+                        <parameterValue>UTF7</parameterValue>
+                        <parameterValue>UTF8</parameterValue>
+                        <parameterValue>UTF32</parameterValue>
+                    </parameterValueGroup>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>InlineAttachments</name>
+                    <parameterValue required="true">Hashtable</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>Port</name>
+                    <parameterValue required="true">int</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>Priority</name>
+                    <parameterValueGroup>
+                        <parameterValue>Normal</parameterValue>
+                        <parameterValue>High</parameterValue>
+                        <parameterValue>Low</parameterValue>
+                    </parameterValueGroup>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>ReplyTo</name>
+                    <parameterValue required="true">string[]</parameterValue>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>UseSsl</name>
+                </parameter>
+            </syntaxItem>
+        </syntax>
+        <parameters>
+            <!-- Attachments -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByValue, ByPropertyName)" position="named" aliases="PsPath">
+                <name>Attachments</name>
+                <description>
+                    <para>Specifies files to be attached to the email message.</para>
+                    <para>Parameter sets: Modern, Legacy</para>
+                </description>
+                <parameterValue required="true">System.String[]</parameterValue>
+                <defaultValue>None</defaultValue>
+            </parameter>
+            <!-- Bcc -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="none">
+                <name>Bcc</name>
+                <description>
+                    <para>Specifies the email addresses that receive a copy of the email but are not listed as recipients of the message.</para>
+                    <para>Accepts email addresses in the following formats:</para>
+                    <list class="bullet" name="This is a test">
+                        <listItem><para>Email by itself: 'mailaddress@domain.tld'</para></listItem>
+                        <listItem><para>Email with display (friendly) name: 'Display name &lt;mailaddress@domain.tld&gt;'</para></listItem>
+                    </list>
+                    <para />
+                    <para>Parameter sets: Modern, Legacy</para>
+                </description>
+                <parameterValue required="true">System.String[]</parameterValue>
+                <defaultValue>None</defaultValue>
+            </parameter>
+            <!-- Body -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="2" aliases="none">
+                <name>Body</name>
+                <description>
+                    <para>Specifies the content of the email message.</para>
+                    <para>Parameter sets: Modern, Legacy</para>
+                </description>
+                <parameterValue required="true">System.String</parameterValue>
+                <defaultValue>None</defaultValue>
+            </parameter>
+            <!-- BodyAsHtml -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="BAH">
+                <name>BodyAsHtml</name>
+                <description>
+                    <para>Specifies that the Body contents are in an HTML format so the recipients' mail clients will render it correctly.</para>
+                    <para>Parameter sets: Legacy</para>
+                </description>
+                <parameterValue required="true">SwitchParameter</parameterValue>
+                <defaultValue>False</defaultValue>
+            </parameter>
+            <!-- BodyFormat -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="none">
+                <name>BodyFormat</name>
+                <description>
+                    <para>Specifies the format of the email message's Body contents so the recipients' mail clients will render it correctly.</para>
+                    <para>The acceptable values for this parameter are:</para>
+                    <para>The acceptable values for this parameter are:</para>
+                    <list class="bullet">
+                        <listItem><para>Plain</para></listItem>
+                        <listItem><para>Text</para></listItem>
+                        <listItem><para>Flowed</para></listItem>
+                        <listItem><para>Html</para></listItem>
+                        <listItem><para>Enriched</para></listItem>
+                        <listItem><para>CompressedRichText</para></listItem>
+                        <listItem><para>RichText</para></listItem>
+                    </list>
+                    <para />
+                    <para>Parameter sets: Modern</para>
+                </description>
+                <parameterValue required="true">MimeKit.Text.TextFormat</parameterValue>
+                <defaultValue>Plain</defaultValue>
+            </parameter>
+            <!-- Cc -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="none">
+                <name>Cc</name>
+                <description>
+                    <para>Specifies the email addresses that receive a copy of the email, listed as Carbon Copy (CC) recipients of the message.</para>
+                    <para>Accepts email addresses in the following formats:</para>
+                    <list class="bullet" name="This is a test">
+                        <listItem><para>Email by itself: 'mailaddress@domain.tld'</para></listItem>
+                        <listItem><para>Email with display (friendly) name: 'Display name &lt;mailaddress@domain.tld&gt;'</para></listItem>
+                    </list>
+                    <para />
+                    <para>Parameter sets: Modern, Legacy</para>
+                </description>
+                <parameterValue required="true">System.String[]</parameterValue>
+                <defaultValue>None</defaultValue>
+            </parameter>
+            <!-- CharsetEncoding -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="none">
+                <name>CharsetEncoding</name>
+                <description>
+                    <para>Specifies the type of encoding for the message body as a [System.Text.Encoding] type.</para>
+                    <para>Note: unlike with the Legacy Encoding parameter, this does not change the content transfer encoding</para>
+                    <para>Parameter sets: Modern</para>
+                </description>
+                <parameterValue required="true">System.Text.Encoding</parameterValue>
+                <defaultValue>UTF8</defaultValue>
+            </parameter>
+            <!-- ContentTransferEncoding -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="none">
+                <name>ContentTransferEncoding</name>
+                <description>
+                    <para>Specifies the content transfer encoding type to use for the mail message.</para>
+                    <para>The acceptable values for this parameter are:</para>
+                    <list class="bullet">
+                        <listItem><para>Default</para></listItem>
+                        <listItem><para>SevenBit</para></listItem>
+                        <listItem><para>EightBit</para></listItem>
+                        <listItem><para>Binary</para></listItem>
+                        <listItem><para>Base64</para></listItem>
+                        <listItem><para>QuotedPrintable</para></listItem>
+                        <listItem><para>UUEncode</para></listItem>
+                    </list>
+                    <para />
+                    <para>Note: the Legacy mode transfer encoding with the default Encoding is QuotedPrintable</para>
+                    <para />
+                    <para>Parameter sets: Modern</para>
+                </description>
+                <parameterValue required="true">MimeKit.ContentEncoding</parameterValue>
+                <defaultValue>Base64</defaultValue>
+            </parameter>
+            <!-- Credential -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="none">
+                <name>Credential</name>
+                <description>
+                    <para>Specifies the credentials to use for authenticating to the SMTP server. If left blank, no authentication will be attempted.</para>
+                    <para>Type a user name, such as User01 or Domain01\User01, and you will be prompted for your password. Or, enter a [PSCredential] object, such as one from the Get-Credential cmdlet.</para>
+                    <para>Credentials are stored in a [PSCredential] object and the password is stored as a [SecureString].</para>
+                    <para>Additional info:</para>
+                    <list class="bullet">
+                        <listItem><para>PSCredential: https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.pscredential</para></listItem>
+                        <listItem><para>SecureString: https://docs.microsoft.com/en-us/dotnet/api/system.security.securestring</para></listItem>
+                    </list>
+                    <para />
+                    <para>Parameter sets: Modern, Legacy</para>
+                </description>
+                <parameterValue required="true">System.Management.Automation.PSCredential</parameterValue>
+                <defaultValue>None</defaultValue>
+            </parameter>
+            <!-- DeliveryNotificationOption -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="DNO">
+                <name>DeliveryNotificationOption</name>
+                <description>
+                    <para>Specifies the delivery notification options for the email message.</para>
+                    <para>The delivery notifications are sent to the address in the From parameter.</para>
+                    <para>The acceptable values for this parameter are:</para>
+                    <list class="bullet">
+                        <listItem><para>None: No notification</para></listItem>
+                        <listItem><para>OnSuccess: Notify if the delivery is successful</para></listItem>
+                        <listItem><para>OnFailure: Notify if the delivery is unsuccessful</para></listItem>
+                        <listItem><para>Delay: Notify if the delivery is delayed</para></listItem>
+                        <listItem><para>Never: Never notify</para></listItem>
+                    </list>
+                    <para />
+                    <para>Parameter sets: Legacy</para>
+                </description>
+                <parameterValue required="true">PoshMailKit.Internals.DeliveryNotificationOptions</parameterValue>
+                <defaultValue>None</defaultValue>
+            </parameter>
+            <!-- DeliveryStatusNotification -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="none">
+                <name>DeliveryStatusNotification</name>
+                <description>
+                    <para>Specifies the delivery notification options for the email message.</para>
+                    <para>The delivery notifications are sent to the address in the From parameter.</para>
+                    <para>The acceptable values for this parameter are:</para>
+                    <list class="bullet">
+                        <listItem><para>Never: Never notify</para></listItem>
+                        <listItem><para>Success: Notify if the delivery is successful</para></listItem>
+                        <listItem><para>Failure: Notify if the delivery is unsuccessful</para></listItem>
+                        <listItem><para>Delay: Notify if the delivery is delayed</para></listItem>
+                    </list>
+                    <para />
+                    <para>Parameter sets: Modern</para>
+                </description>
+                <parameterValue required="false">MailKit.DeliveryStatusNotification</parameterValue>
+                <defaultValue>None</defaultValue>
+            </parameter>
+            <!-- Encoding -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="BE">
+                <name>Encoding</name>
+                <description>
+                    <para>Specifies the type of encoding for the message body.</para>
+                    <para>The acceptable values for this parameter are:</para>
+                    <list class="bullet">
+                        <listItem><para>ASCII: Uses ASCII (7-bit) character set</para></listItem>
+                        <listItem><para>BigEndianUnicode: Uses UTF-16 with the big-endian byte order</para></listItem>
+                        <listItem><para>BigEndianUTF32: Uses UTF-32 with the big-endian byte order</para></listItem>
+                        <!--listItem><para>OEM: Uses the encoding that corresponds to the system's current OEM code page</para></listItem-->
+                        <listItem><para>Unicode: Uses UTF-16 with the little-endian byte order</para></listItem>
+                        <listItem><para>UTF7: Uses UTF-7</para></listItem>
+                        <listItem><para>UTF8: Uses UTF-8</para></listItem>
+                        <listItem><para>UTF8BOM: Uses UTF-8, explicitly with BOM</para></listItem>
+                        <listItem><para>UTF8NoBOM: Uses UTF-8, explicitly without BOM</para></listItem>
+                        <listItem><para>UTF32: Uses UTF-32 with the little-endian byte order</para></listItem>
+                    </list>
+                    <para />
+                    <para>Parameter sets: Legacy</para>
+                </description>
+                <parameterValue required="true">PoshMailKit.Internals.Encoding</parameterValue>
+                <defaultValue>ASCII</defaultValue>
+            </parameter>
+            <!-- From -->
+            <parameter required="true" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="none">
+                <name>From</name>
+                <description>
+                    <para>Specifies the sender's email address.</para>
+                    <para>Accepts email addresses in the following formats:</para>
+                    <list class="bullet" name="This is a test">
+                        <listItem><para>Email by itself: 'mailaddress@domain.tld'</para></listItem>
+                        <listItem><para>Email with display (friendly) name: 'Display name &lt;mailaddress@domain.tld&gt;'</para></listItem>
+                    </list>
+                    <para />
+                    <para>Parameter sets: Modern, Legacy</para>
+                </description>
+                <parameterValue required="true">System.String</parameterValue>
+                <defaultValue>None</defaultValue>
+            </parameter>
+            <!-- InlineAttachments -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="none">
+                <name>InlineAttachments</name>
+                <description>
+                    <para>Specifies files to be attached inline to the email message along with a label for each, as a hashtable with the labels as the keys and the file paths as the values.</para>
+                    <para>This is useful for setting up inline images for an HTML body, for example. Using it this way might look like this:</para>
+                    <para>"[...] -InlineAttachments @{logo = '.\logo-image.png'} -Body "[...]&lt;img src='cid:logo' /&gt;[...]" -BodyFormat Html [...]"</para>
+                    <para>Parameter sets: Modern, Legacy</para>
+                </description>
+                <parameterValue required="true">System.Collections.Hashtable</parameterValue>
+                <defaultValue>None</defaultValue>
+            </parameter>
+            <!-- Legacy -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="none">
+                <name>Legacy</name>
+                <description>
+                    <para>Force Send-MKMailMessage to function in Legacy mode.</para>
+                    <para>There are a number of differences in how the cmdlet behaves by default vs the legacy Send-MailMessage. If any of the Legacy set parameters are used, Send-MKMailMessage will switch to Legacy mode and emulate the behaviors of Send-MailMessage; however, if no Legacy paramaters are used, then it will operate in Modern mode. Use this switch to force the cmdlet into Legacy mode without needing to use a Legacy parameter.</para>
+                    <para>Parameter sets: Legacy</para>
+                </description>
+                <parameterValue required="true">SwitchParameter</parameterValue>
+                <defaultValue>False</defaultValue>
+            </parameter>
+            <!-- MessagePriority -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="none">
+                <name>MessagePriority</name>
+                <description>
+                    <para>Specifies the priority of the email message.</para>
+                    <para>The acceptable values for this parameter are:</para>
+                    <list class="bullet">
+                        <listItem><para>NonUrgent: Low priority</para></listItem>
+                        <listItem><para>Normal: Normal priority (no priority flag set)</para></listItem>
+                        <listItem><para>Urgent: High priority</para></listItem>
+                    </list>
+                    <para/>
+                    <para>Parameter sets: Modern</para>
+                </description>
+                <parameterValue required="true">MimeKit.MessagePriority</parameterValue>
+                <defaultValue>Normal</defaultValue>
+            </parameter>
+            <!-- Port -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="none">
+                <name>Port</name>
+                <description>
+                    <para>Specifies which port to connect to on the SMTP server.</para>
+                    <para>Parameter sets: Modern, Legacy</para>
+                </description>
+                <parameterValue required="true">System.Int32</parameterValue>
+                <defaultValue>25</defaultValue>
+            </parameter>
+            <!-- Priority -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="none">
+                <name>Priority</name>
+                <description>
+                    <para>Specifies the priority of the email message.</para>
+                    <para>The acceptable values for this parameter are:</para>
+                    <list class="bullet">
+                        <listItem><para>Normal</para></listItem>
+                        <listItem><para>High</para></listItem>
+                        <listItem><para>Low</para></listItem>
+                    </list>
+                    <para/>
+                    <para>Parameter sets: Legacy</para>
+                </description>
+                <parameterValue required="true">PoshMailKit.Internals.MailPriority</parameterValue>
+                <defaultValue>Normal</defaultValue>
+            </parameter>
+            <!-- ReplyTo -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="none">
+                <name>ReplyTo</name>
+                <description>
+                    <para>Specifies additional email addresses (other than the From address) to use to reply to this message.</para>
+                    <para>Accepts email addresses in the following formats:</para>
+                    <list class="bullet">
+                        <listItem><para>Email by itself: 'mailaddress@domain.tld'</para></listItem>
+                        <listItem><para>Email with display (friendly) name: 'Display name &lt;mailaddress@domain.tld&gt;'</para></listItem>
+                    </list>
+                    <para />
+                    <para>Parameter sets: Modern, Legacy</para>
+                </description>
+                <parameterValue required="true">System.String[]</parameterValue>
+                <defaultValue>None</defaultValue>
+            </parameter>
+            <!-- SecureSocketOptions -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="none">
+                <name>SecureSocketOptions</name>
+                <description>
+                    <para>Specifies how to approach secure connections.</para>
+                    <para>The delivery notifications are sent to the address in the From parameter.</para>
+                    <para>The acceptable values for this parameter are:</para>
+                    <list class="bullet">
+                        <listItem><para>None: No SSL or TLS encryption should be used</para></listItem>
+                        <listItem><para>Auto: Let MailKit decide which SSL or TLS option to use; if the server does not support SSL or TLS, then the connection will continue without any encryption; if it does but the server certificate is invalid or untrusted, the connection will fail</para></listItem>
+                        <listItem><para>SslOnConnect: The connection should use SSL or TLS immediately</para></listItem>
+                        <listItem><para>StartTls: Elevates the connection to use TLS encryption immediately after reading the greeting and capabilities of the server; if the server does not support the STARTTLS extension, then the connection will fail</para></listItem>
+                        <listItem><para>StartTlsWhenAvailable: Elevates the connection to use TLS encryption immediately after reading the greeting and capabilities of the server, but only if the server supports the STARTTLS extension</para></listItem>
+                    </list>
+                    <para />
+                    <para>Parameter sets: Modern</para>
+                </description>
+                <parameterValue required="true">MailKit.Security.SecureSocketOptions</parameterValue>
+                <defaultValue>Auto</defaultValue>
+            </parameter>
+            <!-- SmtpServer -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="3" aliases="ComputerName">
+                <name>SmtpServer</name>
+                <description>
+                    <para>Specifies the name of the SMTP server to send the email to.</para>
+                    <para>The default value is the value of the $PSEmailServer preference variable. If the variable is not set and this parameter is not used, the command fails.</para>
+                    <para>Parameter sets: Modern, Legacy</para>
+                </description>
+                <parameterValue required="true">System.String</parameterValue>
+                <defaultValue>$PSEmailServer</defaultValue>
+            </parameter>
+            <!-- Subject -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="1" aliases="sub">
+                <name>Subject</name>
+                <description>
+                    <para>This parameter specifies the subject of the email message.</para>
+                    <para>Parameter sets: Modern, Legacy</para>
+                </description>
+                <parameterValue required="true">System.String</parameterValue>
+                <defaultValue>None</defaultValue>
+            </parameter>
+            <!-- To -->
+            <parameter required="true" globbing="false" pipelineInput="true (ByPropertyName)" position="0" aliases="none">
+                <name>To</name>
+                <description>
+                    <para>Specifies the email addresses of the primary recipients of the email message.</para>
+                    <para>Accepts email addresses in the following formats:</para>
+                    <list class="bullet" name="This is a test">
+                        <listItem><para>Email by itself: 'mailaddress@domain.tld'</para></listItem>
+                        <listItem><para>Email with display (friendly) name: 'Display name &lt;mailaddress@domain.tld&gt;'</para></listItem>
+                    </list>
+                    <para />
+                    <para>Parameter sets: Modern, Legacy</para>
+                </description>
+                <parameterValue required="true">System.String[]</parameterValue>
+                <defaultValue>None</defaultValue>
+            </parameter>
+            <!-- UseSsl -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="none">
+                <name>UseSsl</name>
+                <description>
+                    <para>The Secure Sockets Layer (SSL) protocol is used to establish a secure connection to the remote computer to send mail. By default, SSL is not used in Legacy mode.</para>
+                    <para>Parameter sets: Legacy</para>
+                </description>
+                <parameterValue required="true">SwitchParameter</parameterValue>
+                <defaultValue>False</defaultValue>
+            </parameter>
+        </parameters>
+        <inputTypes>
+            <inputType>
+                <type>
+                    <name>System.String</name>
+                </type>
+                <description>
+                    <para>You can pipe the path and file names of attachments to Send-MKMailMessage.</para>
+                </description>
+            </inputType>
+        </inputTypes>
+        <returnValues>
+            <returnValue>
+                <type>
+                    <name>None</name>
+                </type>
+                <description>
+                    <para>This cmdlet does not generate any output.</para>
+                </description>
+            </returnValue>
+        </returnValues>
+        <alertSet>
+            <alert>
+                <para></para>
+            </alert>
+        </alertSet>
+        <examples>
+            <example>
+                <title>-- Example 1: Send an email from one person to another person --</title>
+                <code>Send-MKMailMessage -From 'Emily &lt;emily@poshcodebear.com&gt;' -To 'Erica &lt;erica@poshcodebear.com&gt;' -Subject 'Test mail'</code>
+                <remarks>
+                    <para>The Send-MKMailMessage cmdlet uses the From parameter to specify the message's sender. The To parameter specifies the message's recipient. The Subject parameter uses the text string Test mail as the message because the optional Body parameter is not included. Since the SmtpServer parameter isn't specified, it will attempt to use the value of $PSEmailServer as the server to send to.</para>
+                </remarks>
+            </example>
+            <example>
+                <title>---------------- Example 2: Send an attachment ----------------</title>
+                <code>Send-MKMailMessage -From 'Emily &lt;emily@poshcodebear.com&gt;' -To 'Erica &lt;erica@poshcodebear.com&gt;', 'Jessica &lt;jessica@poshcodebear.com&gt;' -Subject 'Sending the Attachment' -Body "Forgot to send the attachment. Sending now." -Attachments .\honey-report.csv -MessagePriority Urgent -DeliveryStatusNotification Success -SmtpServer 'smtp.poshcodebear.com'</code>
+                <remarks>
+                    <para>The Send-MKMailMessage cmdlet uses the From parameter to specify the message's sender. The To parameter specifies the message's recipients. The Subject parameter describes the content of the message. The Body parameter is the content of the message.</para>
+                    <para>The Attachments parameter specifies the file in the current directory that is attached to the email message. The MessagePriority parameter sets the message to Urgent priority. The -DeliveryStatusNotification parameter is set to Success, so the sender will receive email notifications to confirm the success of the message delivery. The SmtpServer parameter sets the SMTP server to smtp.poshcodebear.com.</para>
+                </remarks>
+            </example>
+            <example>
+                <title>----------- Example 3: Send email using credentials and TLS -----------</title>
+                <code>Send-MKMailMessage -From 'Emily &lt;emily@poshcodebear.com&gt;' -To 'Hibernation Prep Team &lt;hibernators@poshcodebear.com&gt;' -Cc 'Erica &lt;erica@fabrikam.com&gt;' -Bcc 'Hibernation Manager &lt;hiberman@poshcodebear.com&gt;' -Subject "Don't forget, hibernation is just three weeks away!" -Credential poshcodebear\emily -SecureSocketOptions StartTls</code>
+                <remarks>
+                    <para>The Send-MKMailMessage cmdlet uses the From parameter to specify the message's sender. The To parameter specifies the message's recipients. The Cc parameter sends a copy of the message to the specified recipient. The Bcc parameter sends a blind copy of the message. A blind copy is an email address that is hidden from the other recipients.</para>
+                    <para>The Credential parameter specifies a domain user's credentials are used to send the message. The SecureSocketOptions parameter specifies that STARTTLS will be used to create a secure connection.</para>
+                </remarks>
+            </example>
+        </examples>
+        <relatedLinks>
+            <navigationLink>
+                <linkText>Online Version:</linkText>
+                <uri>https://github.com/poshcodebear/PoshMailKit/blob/main/doc/helpfiles/Send-MKMailMessage.md</uri>
+            </navigationLink>
+            <navigationLink>
+                <linkText>about_PoshMailKit</linkText>
+            </navigationLink>
+            <navigationLink>
+                <linkText>Get-Credential</linkText>
+            </navigationLink>
+            <navigationLink>
+                <linkText>PoshMailKit PowerShell Gallery page:</linkText>
+                <uri>https://www.powershellgallery.com/packages/PoshMailKit</uri>
+            </navigationLink>
+            <navigationLink>
+                <linkText>PoshMailKit project:</linkText>
+                <uri>https://github.com/poshcodebear/PoshMailKit</uri>
+            </navigationLink>
+            <navigationLink>
+                <linkText>MailKit project:</linkText>
+                <uri>https://github.com/jstedfast/MailKit</uri>
+            </navigationLink>
+            <navigationLink>
+                <linkText>MimeKit project:</linkText>
+                <uri>https://github.com/jstedfast/MimeKit</uri>
+            </navigationLink>
+        </relatedLinks>
+    </command>
+</helpItems>
