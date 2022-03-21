@@ -1,0 +1,20 @@
+TOPIC
+    about_PoshMailKit
+
+SHORT DESCRIPTION
+    A PowerShell frontend for MailKit
+
+LONG DESCRIPTION
+    PoshMailKit is designed to implement functionality from MailKit to make working with email in PowerShell easier. It currently hosts Send-MKMailMessage as a drop-in replacement for Send-MailMessage, which uses the deprecated and insecure System.Net.Mail.SmtpClient.
+
+EXAMPLES
+    See the examples in Send-MKMailMessage
+
+KEYWORDS
+    Mail, Email, MailKit, MimeKit, Send-MailMessage, Send-MKMailMessage
+
+SEE ALSO
+    PoshMailKit PowerShell Gallery page: https://www.powershellgallery.com/packages/PoshMailKit
+    PoshMailKit project: https://github.com/poshcodebear/PoshMailKit
+    MailKit project: https://github.com/jstedfast/MailKit
+    MimeKit project: https://github.com/jstedfast/MimeKit
