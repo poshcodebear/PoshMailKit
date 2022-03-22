@@ -1,6 +1,7 @@
 ﻿using MimeKit;
 using MimeKit.Text;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace PoshMailKit.Internals
 {
@@ -10,6 +11,8 @@ namespace PoshMailKit.Internals
         private MimeMessage message { get; set; }
         private TextPart TextMailBody { get; set; }
         private Multipart MultipartMailBody { get; set; }
+
+        private static Regex EmailWithDisplayNamePattern = new Regex("^(?<DisplayName>[^<]+)<(?<Email>[^>]+)>$");
 
         // Setters
         public string Subject { set => message.Subject = value; }
@@ -56,9 +59,19 @@ namespace PoshMailKit.Internals
             message = new MimeMessage();
         }
 
-        private MailboxAddress GetMailboxAddressObj(string email)
+        public MailboxAddress GetMailboxAddressObj(string email)
         {
-            return new MailboxAddress("", email);
+            string displayName = "";
+            var regexResult = EmailWithDisplayNamePattern.Match(email);
+            if (regexResult.Success)
+            {
+                displayName = regexResult.Groups["DisplayName"].Value.Trim();
+                email = regexResult.Groups["Email"].Value;
+            }
+
+            MailboxAddress mailboxAddress = new MailboxAddress(displayName, email);
+            var _ = ((System.Net.Mail.MailAddress)mailboxAddress);
+            return mailboxAddress;
         }
 
         public void AddAttachments(List<MimePart> filesToAttach)

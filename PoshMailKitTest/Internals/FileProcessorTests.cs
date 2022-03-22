@@ -33,12 +33,88 @@ namespace PoshMailKitTest.Internals
         }
 
         [Fact]
-        public void GetFullPathName_FileNameOnly_ReturnsFullPath()
+        public void GetFullPathName_FileFullPath_ReturnsFullPath()
         {
             // Arrange
             var fileName = @"C:\test\tmp\test.txt";
             var filePath = @"C:\test\tmp";
             var expectedReturnPath = @"C:\test\tmp\test.txt";
+
+            var fileProcessor = CreateFileProcessor(filePath, GetMockFileSystem());
+
+            // Act
+            var result = fileProcessor.GetFullPathName(fileName);
+
+            // Assert
+            Assert.True(result == expectedReturnPath,
+                $"Actual: {result}, expected: {expectedReturnPath}");
+            mockRepository.VerifyAll();
+        }
+
+        [Fact]
+        public void GetFullPathName_FileFullNetworkPath_ReturnsFullPath()
+        {
+            // Arrange
+            var fileName = @"\\srv\test\tmp\test.txt";
+            var filePath = @"\\srv\test\tmp";
+            var expectedReturnPath = @"\\srv\test\tmp\test.txt";
+
+            var fileProcessor = CreateFileProcessor(filePath, GetMockFileSystem());
+
+            // Act
+            var result = fileProcessor.GetFullPathName(fileName);
+
+            // Assert
+            Assert.True(result == expectedReturnPath,
+                $"Actual: {result}, expected: {expectedReturnPath}");
+            mockRepository.VerifyAll();
+        }
+
+        [Fact]
+        public void GetFullPathName_FileFullNetworkPathMixedPathSeparators_ReturnsFullPath()
+        {
+            // Arrange
+            var fileName = @"\\srv\test/tmp/test.txt";
+            var filePath = @"\\srv\test\tmp";
+            var expectedReturnPath = @"\\srv\test\tmp\test.txt";
+
+            var fileProcessor = CreateFileProcessor(filePath, GetMockFileSystem());
+
+            // Act
+            var result = fileProcessor.GetFullPathName(fileName);
+
+            // Assert
+            Assert.True(result == expectedReturnPath,
+                $"Actual: {result}, expected: {expectedReturnPath}");
+            mockRepository.VerifyAll();
+        }
+
+        [Fact]
+        public void GetFullPathName_FileRelativeNetworkPath_ReturnsFullPath()
+        {
+            // Arrange
+            var fileName = @"..\test.txt";
+            var filePath = @"\\srv\test\tmp";
+            var expectedReturnPath = @"\\srv\test\test.txt";
+
+            var fileProcessor = CreateFileProcessor(filePath, GetMockFileSystem());
+
+            // Act
+            var result = fileProcessor.GetFullPathName(fileName);
+
+            // Assert
+            Assert.True(result == expectedReturnPath,
+                $"Actual: {result}, expected: {expectedReturnPath}");
+            mockRepository.VerifyAll();
+        }
+
+        [Fact]
+        public void GetFullPathName_FileRelativeNetworkPathMixedPathSeparators_ReturnsFullPath()
+        {
+            // Arrange
+            var fileName = @"../test.txt";
+            var filePath = @"\\srv\test\tmp";
+            var expectedReturnPath = @"\\srv\test\test.txt";
 
             var fileProcessor = CreateFileProcessor(filePath, GetMockFileSystem());
 
@@ -71,7 +147,7 @@ namespace PoshMailKitTest.Internals
         }
 
         [Fact]
-        public void GetFullPathName_FileFullPath_ReturnsFullPath()
+        public void GetFullPathName_FileNameOnly_ReturnsFullPath()
         {
             // Arrange
             var fileName = "test.txt";
