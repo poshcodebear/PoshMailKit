@@ -31,7 +31,7 @@ You can find the current version on the PowerShell Gallery here: https://www.pow
 You can also install using the following command:
 
 ```powershell
-Install-Module -Name PoshMailKit -AllowPrerelease
+Install-Module -Name PoshMailKit
 ```
 
 ## Building the project
