@@ -9,7 +9,7 @@ namespace PoshMailKit.Internals
     {
         public string WorkingDirectory { get; set; }
         private readonly IFileSystem FileSystem;
-        private readonly Regex pathPattern = new Regex(@"^[a-zA-Z]:");
+        private readonly Regex pathPattern = new Regex(@"^([a-zA-Z]:|//|\\\\)");
 
         public FileProcessor(string workingDirectory, IFileSystem fileSystem)
         {
@@ -26,7 +26,7 @@ namespace PoshMailKit.Internals
             if (!pathPattern.IsMatch(fileName))
                 return Path.GetFullPath($"{WorkingDirectory}\\{fileName}");
             else
-                return fileName;
+                return Path.GetFullPath(fileName);
         }
 
         public MimePart GetFileMimePart(string fileName, ContentDispositionType contentDisposition, string label = null)
