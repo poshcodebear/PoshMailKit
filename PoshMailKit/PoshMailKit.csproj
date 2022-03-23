@@ -26,32 +26,30 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <PackageReference Include="MailKit" Version="3.1.1" />
+    <PackageReference Include="System.IO.Abstractions" Version="16.1.24" />
+    <PackageReference Include="System.Management.Automation" Version="7.2.2" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+    
     <None Include="packages.config" />
+    
     <None Include="ModuleMembers\PoshMailKit.psd1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  
-  <ItemGroup>
+    
     <None Include="ModuleMembers\en-US\PoshMailKit.dll-help.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  
-  <ItemGroup>
+    
     <None Include="ModuleMembers\en-US\about_PoshMailKit.help.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="MailKit" Version="3.1.1" />
-    <PackageReference Include="System.IO.Abstractions" Version="16.1.24" />
-    <PackageReference Include="System.Management.Automation" Version="7.2.2" />
   </ItemGroup>
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
