@@ -1,19 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+<!--Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003"-->
+  <!--Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" /-->
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <!-- <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform> -->
     <ProjectGuid>{5630C3F8-B365-46F3-8B63-3ED9C193C45A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PoshMailKit</RootNamespace>
     <AssemblyName>PoshMailKit</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- <Nullable>enable</Nullable> -->
+    <TargetFramework>net6.0</TargetFramework>
+    <!-- <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
+    <Deterministic>true</Deterministic> -->
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <!-- <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -29,37 +33,37 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="BouncyCastle.Crypto, Version=1.9.0.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
+  </PropertyGroup> -->
+  <!-- <ItemGroup> -->
+    <!-- <Reference Include="BouncyCastle.Crypto, Version=1.9.0.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
       <HintPath>..\packages\Portable.BouncyCastle.1.9.0\lib\net40\BouncyCastle.Crypto.dll</HintPath>
-    </Reference>
-    <Reference Include="MailKit, Version=3.1.0.0, Culture=neutral, PublicKeyToken=4e064fe7c44a8f1b, processorArchitecture=MSIL">
+    </Reference> -->
+    <!-- <Reference Include="MailKit, Version=3.1.0.0, Culture=neutral, PublicKeyToken=4e064fe7c44a8f1b, processorArchitecture=MSIL">
       <HintPath>..\packages\MailKit.3.1.1\lib\net48\MailKit.dll</HintPath>
-    </Reference>
-    <Reference Include="MimeKit, Version=3.1.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814, processorArchitecture=MSIL">
+    </Reference> -->
+   <!--  <Reference Include="MimeKit, Version=3.1.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814, processorArchitecture=MSIL">
       <HintPath>..\packages\MimeKit.3.1.1\lib\net48\MimeKit.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
     </Reference>
-    <Reference Include="System.Core" />
-    <Reference Include="System.IO.Abstractions, Version=16.0.0.0, Culture=neutral, PublicKeyToken=96bf224d23c43e59, processorArchitecture=MSIL">
+    <Reference Include="System.Core" /> -->
+    <!-- <Reference Include="System.IO.Abstractions, Version=16.0.0.0, Culture=neutral, PublicKeyToken=96bf224d23c43e59, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.Abstractions.16.1.23\lib\net461\System.IO.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Management.Automation.dll.10.0.10586.0\lib\net40\System.Management.Automation.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security" />
+    </Reference> -->
+    <!-- <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
+    <Reference Include="System.Xml" /> -->
+  <!-- </ItemGroup> -->
+  <!--<ItemGroup>
     <Compile Include="Internals\DeliveryNotificationOptions.cs" />
     <Compile Include="Internals\Encoding.cs" />
     <Compile Include="Internals\FileProcessor.cs" />
@@ -70,7 +74,7 @@
     <Compile Include="Internals\SmtpProcessor.cs" />
     <Compile Include="SendMKMailMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
+  </ItemGroup>-->
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="ModuleMembers\PoshMailKit.psd1">
@@ -87,11 +91,16 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="MailKit" Version="3.1.1" />
+    <PackageReference Include="System.IO.Abstractions" Version="16.1.24" />
+    <PackageReference Include="System.Management.Automation" Version="7.2.2" />
+  </ItemGroup>
+ <!--  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" /> -->
+  <!--<PropertyGroup>
     <PostBuildEvent>pwsh.exe -C "Remove-Item -Path '$(TargetDir)\PoshMailKit' -Recurse -Force -ea ignore"
 pwsh.exe -C "New-Item -Path '$(TargetDir)\PoshMailKit' -Type Directory"
 pwsh.exe -C "Copy-Item -Path '$(TargetDir)\*.dll' -Destination '$(TargetDir)\PoshMailKit\'"
 pwsh.exe -C "Copy-Item -Path '$(TargetDir)\ModuleMembers\*' -Destination '$(TargetDir)\PoshMailKit\'" -Recurse</PostBuildEvent>
-  </PropertyGroup>
+  </PropertyGroup>-->
 </Project>
