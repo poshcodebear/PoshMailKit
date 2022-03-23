@@ -3,17 +3,15 @@
   
   <PropertyGroup>
     <ProjectGuid>{5630C3F8-B365-46F3-8B63-3ED9C193C45A}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PoshMailKit</RootNamespace>
-    <AssemblyName>PoshMailKit</AssemblyName>
     <ImplicitUsings>enable</ImplicitUsings>
     <!-- <Nullable>enable</Nullable> -->
     <TargetFramework>net6.0</TargetFramework>
     <Authors>The PowerShell Bear</Authors>
-    <AssemblyVersion>1.0.0</AssemblyVersion>
-    <FileVersion>1.0.0</FileVersion>
-    <Version>$(VersionPrefix)</Version>
+	<VersionPrefix>2.0.0</VersionPrefix>
+	<VersionSuffix>alpha1</VersionSuffix>
+    <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+    <FileVersion>$(VersionPrefix)-$(VersionSuffix)</FileVersion>
+	<Version>$(VersionPrefix)-$(VersionSuffix)</Version>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/poshcodebear/PoshMailKit</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -21,7 +19,6 @@
     <Description>A PowerShell front end to the MailKit project including a near-drop-in replacement for Send-MailMessage</Description>
     <PackageReleaseNotes>https://github.com/poshcodebear/PoshMailKit/releases</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <SignAssembly>False</SignAssembly>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   
