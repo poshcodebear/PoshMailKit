@@ -29,10 +29,10 @@ public class SmtpProcessor
     public void SendMailMessage()
     {
         Client.DeliveryStatusNotification = Notification;
-        if (SmtpServer != null && Message != null)
+        if (SmtpServer is not null && Message is not null)
         {
             Client.Connect(SmtpServer, SmtpPort, SecureSocketOptions);
-            if (Credential != null)
+            if (Credential is not null)
                 Client.Authenticate(Credential);
             Client.Send(Message);
             Client.Disconnect(true);

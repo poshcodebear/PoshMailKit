@@ -1,4 +1,4 @@
-﻿using MimeKit;
+using MimeKit;
 using MimeKit.Text;
 using System.Text.RegularExpressions;
 
@@ -18,19 +18,19 @@ public class MessageBuilder
     public MessagePriority Priority { set => message.Priority = value; }
     public string From { set => message.From.Add(GetMailboxAddressObj(value)); }
     public string[] To { set {
-            if (value != null)
+            if (value is not null)
                 foreach (var v in value)
                     message.To.Add(GetMailboxAddressObj(v)); } }
     public string[] Cc { set {
-            if (value != null)
+            if (value is not null)
                 foreach (var v in value)
                     message.Cc.Add(GetMailboxAddressObj(v)); } }
     public string[] Bcc { set {
-            if (value != null)
+            if (value is not null)
                 foreach (var v in value)
                     message.Bcc.Add(GetMailboxAddressObj(v)); } }
     public string[] ReplyTo { set {
-            if (value != null)
+            if (value is not null)
                 foreach (var v in value)
                     message.ReplyTo.Add(GetMailboxAddressObj(v)); } }
 
@@ -41,13 +41,13 @@ public class MessageBuilder
             MimeMessage mimeMessage = message;
             Multipart multipart = MultipartMailBody;
 
-            if (multipart != null)
+            if (multipart is not null)
             {
-                if (TextMailBody != null)
+                if (TextMailBody is not null)
                     multipart.Add(TextMailBody);
                 mimeMessage.Body = multipart;
             }
-            else if (TextMailBody != null)
+            else if (TextMailBody is not null)
                 mimeMessage.Body = TextMailBody;
             return mimeMessage;
         }
@@ -75,9 +75,9 @@ public class MessageBuilder
 
     public void AddAttachments(List<MimePart> filesToAttach)
     {
-        if (filesToAttach != null && filesToAttach.Count > 0)
+        if (filesToAttach is not null && filesToAttach.Count > 0)
         {
-            if (MultipartMailBody == null)
+            if (MultipartMailBody is null)
             {
                 MultipartMailBody = new Multipart("mixed");
             }
@@ -94,7 +94,7 @@ public class MessageBuilder
     {
         TextMailBody = new TextPart(format);
         TextMailBody.ContentTransferEncoding = contentTransferEncoding;
-        if (body != null)
+        if (body is not null)
             TextMailBody.SetText(charsetEncoding, body);
     }
 }

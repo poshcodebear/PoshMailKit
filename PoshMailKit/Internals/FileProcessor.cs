@@ -41,7 +41,7 @@ public class FileProcessor
             FileName = Path.GetFileName(fileName),
         };
 
-        if (label != null)
+        if (label is not null)
             mimePart.ContentId = label;
 
         return mimePart;

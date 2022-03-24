@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Management.Automation;
 using MimeKit;
 using MimeKit.Text;
@@ -281,10 +281,10 @@ public class SendMKMailMessage : PSCmdlet
             Subject = Subject,
             Priority = MessagePriority,
             From = From,
-            To = To ?? null,
-            Cc = Cc ?? null,
-            Bcc = Bcc ?? null,
-            ReplyTo = ReplyTo ?? null,
+            To = To,
+            Cc = Cc,
+            Bcc = Bcc,
+            ReplyTo = ReplyTo,
         };
 
         MailMessage.NewMailBody(BodyFormat, CharsetEncoding, Body, ContentTransferEncoding);
@@ -299,7 +299,7 @@ public class SendMKMailMessage : PSCmdlet
             Notification = DeliveryStatusNotification,
         };
 
-        if (Credential != null)
+        if (Credential is not null)
             processor.Credential = (NetworkCredential)Credential;
 
         processor.SendMailMessage();
@@ -335,7 +335,7 @@ public class SendMKMailMessage : PSCmdlet
 
         FilesToAttach = new List<MimePart>();
 
-        if (Attachments != null)
+        if (Attachments is not null)
         {
             ContentDispositionType attachmentContent = ContentDispositionType.Attachment;
             foreach (string file in Attachments)
@@ -345,7 +345,7 @@ public class SendMKMailMessage : PSCmdlet
             }
         }
 
-        if (InlineAttachments != null)
+        if (InlineAttachments is not null)
         {
             ContentDispositionType inlineContent = ContentDispositionType.Inline;
             foreach (string label in InlineAttachments.Keys)
