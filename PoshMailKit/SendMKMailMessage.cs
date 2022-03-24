@@ -292,7 +292,7 @@ public class SendMKMailMessage : PSCmdlet
         MailMessage.NewMailBody(BodyFormat, CharsetEncoding, Body, ContentTransferEncoding);
         MailMessage.AddAttachments(FilesToAttach);
 
-        SmtpProcessor processor = new SmtpProcessor()
+        SmtpProcessor processor = new()
         {
             SmtpServer = SmtpServer,
             SmtpPort = Port,
@@ -315,8 +315,8 @@ public class SendMKMailMessage : PSCmdlet
         {
             string errorMessage = "The email cannot be sent because no SMTP server was specified. " +
                 "You must specify an SMTP server by using either the SmtpServer parameter or the $PSEmailServer variable.";
-            InvalidOperationException exception = new InvalidOperationException(errorMessage);
-            ErrorRecord errorRecord = new ErrorRecord(exception, "", ErrorCategory.InvalidArgument, null);
+            InvalidOperationException exception = new(errorMessage);
+            ErrorRecord errorRecord = new(exception, "", ErrorCategory.InvalidArgument, null);
             ThrowTerminatingError(errorRecord);
         }
 
@@ -333,7 +333,7 @@ public class SendMKMailMessage : PSCmdlet
     private void ProcessAttachments()
     {
         string workingDirectory = SessionState.Path.CurrentFileSystemLocation.Path;
-        FileProcessor fileProcessor = new FileProcessor(workingDirectory);
+        FileProcessor fileProcessor = new(workingDirectory);
 
         FilesToAttach = new List<MimePart>();
 

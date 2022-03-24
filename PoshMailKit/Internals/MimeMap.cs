@@ -8,7 +8,7 @@ internal static class MimeMap
     internal static ContentType GetMimeMap(string ext) =>
         MimeMappings.TryGetValue(ext, out ContentType mimeType) ? mimeType : new ContentType("application", "octet-stream");
 
-    private static readonly Dictionary<string, ContentType> MimeMappings = new Dictionary<string, ContentType>
+    private static readonly Dictionary<string, ContentType> MimeMappings = new()
     {
         { ".323",         new ContentType("text",        "h323")                                                          },
         { ".aaf",         new ContentType("application", "octet-stream")                                                  },

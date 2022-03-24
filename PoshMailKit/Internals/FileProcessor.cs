@@ -9,7 +9,7 @@ public class FileProcessor
 {
     public string WorkingDirectory { get; set; }
     private readonly IFileSystem FileSystem;
-    private readonly Regex pathPattern = new Regex(@"^([a-zA-Z]:|//|\\\\)");
+    private readonly Regex pathPattern = new(@"^([a-zA-Z]:|//|\\\\)");
 
     public FileProcessor(string workingDirectory, IFileSystem fileSystem)
     {
@@ -35,7 +35,7 @@ public class FileProcessor
 
         ContentType contentType = MimeMap.GetMimeMap(Path.GetExtension(fileName));
 
-        MimePart mimePart = new MimePart(contentType)
+        MimePart mimePart = new(contentType)
         {
             Content = new MimeContent(fileStream),
             ContentDisposition = new ContentDisposition(contentDisposition.ToString()),

@@ -12,7 +12,7 @@ public class MessageBuilder
     private TextPart TextMailBody { get; set; }
     private Multipart MultipartMailBody { get; set; }
 
-    private static Regex EmailWithDisplayNamePattern = new Regex("^(?<DisplayName>[^<]+)<(?<Email>[^>]+)>$");
+    private static Regex EmailWithDisplayNamePattern = new("^(?<DisplayName>[^<]+)<(?<Email>[^>]+)>$");
 
     // Setters
     public string Subject { set => message.Subject = value; }
@@ -69,7 +69,7 @@ public class MessageBuilder
             email = regexResult.Groups["Email"].Value;
         }
 
-        MailboxAddress mailboxAddress = new MailboxAddress(displayName, email);
+        MailboxAddress mailboxAddress = new(displayName, email);
         var _ = ((System.Net.Mail.MailAddress)mailboxAddress);
         return mailboxAddress;
     }
