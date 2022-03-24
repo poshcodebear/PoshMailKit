@@ -32,7 +32,7 @@ public class FileProcessor
     {
         Stream fileStream = FileSystem.File.OpenRead(GetFullPathName(fileName));
 
-        ContentType contentType = MimeMap.GetMimeMap(Path.GetExtension(fileName));
+        ContentType contentType = MimeMap.GetContentType(Path.GetExtension(fileName));
 
         MimePart mimePart = new(contentType)
         {
