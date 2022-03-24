@@ -10,7 +10,7 @@
 	<VersionPrefix>2.0.0</VersionPrefix>
 	<VersionSuffix>alpha1</VersionSuffix>
     <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
-    <FileVersion>$(VersionPrefix)-$(VersionSuffix)</FileVersion>
+    <FileVersion>$(VersionPrefix)</FileVersion>
 	<Version>$(VersionPrefix)-$(VersionSuffix)</Version>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/poshcodebear/PoshMailKit</RepositoryUrl>
