@@ -396,16 +396,9 @@ public class SendMKMailMessage : PSCmdlet
             case Encoding.BigEndianUTF32:
                 CharsetEncoding = System.Text.Encoding.GetEncoding("utf-32BE");
                 break;
-            // Not going to support this for now
-            /*case Encoding.OEM:
-                CharsetEncoding = System.Text.Encoding.Default; //Find
-                break;*/
             case Encoding.Unicode:
                 CharsetEncoding = System.Text.Encoding.Unicode;
                 ContentTransferEncoding = ContentEncoding.Base64;
-                break;
-            case Encoding.UTF7:
-                CharsetEncoding = System.Text.Encoding.UTF7;
                 break;
             case Encoding.UTF8:
                 CharsetEncoding = System.Text.Encoding.UTF8;
