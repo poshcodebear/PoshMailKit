@@ -1,4 +1,4 @@
-using MimeKit;
+﻿using MimeKit;
 using MimeKit.Text;
 using System.Text.RegularExpressions;
 
@@ -69,7 +69,10 @@ public class MessageBuilder
         }
 
         MailboxAddress mailboxAddress = new(displayName, email);
+
+        // Test to ensure valid mail addersses
         var _ = ((System.Net.Mail.MailAddress)mailboxAddress);
+
         return mailboxAddress;
     }
 
