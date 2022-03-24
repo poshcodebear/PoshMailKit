@@ -18,7 +18,7 @@ public class MessageBuilderTests
         mockRepository = new MockRepository(MockBehavior.Strict);
     }
 
-    private MessageBuilder CreateMessageBuilder()
+    private static MessageBuilder CreateMessageBuilder()
     {
         return new MessageBuilder();
     }
@@ -240,11 +240,10 @@ public class MessageBuilderTests
     public void GetMailboxAddressObj_ValidEmailAddressOnly_ReturnsSimpleEmailAddress()
     {
         // Arrange
-        var messageBuilder = CreateMessageBuilder();
         var emailAddress = "test@email.com";
 
         // Act
-        var mailboxAddressObj = messageBuilder.GetMailboxAddressObj(emailAddress);
+        var mailboxAddressObj = MessageBuilder.GetMailboxAddressObj(emailAddress);
 
         // Assert
         Assert.Equal(mailboxAddressObj.Address, emailAddress);
@@ -256,13 +255,12 @@ public class MessageBuilderTests
     public void GetMailboxAddressObj_InvalidEmailAddress_ThrowsFormatExceptionError()
     {
         // Arrange
-        var messageBuilder = CreateMessageBuilder();
         var emailAddress = "test?email.com";
 
         // Act & Assert
         try
         {
-            var _ = messageBuilder.GetMailboxAddressObj(emailAddress);
+            var _ = MessageBuilder.GetMailboxAddressObj(emailAddress);
             Assert.False(true,
                 $"Exception expected but not thrown");
         }
@@ -279,14 +277,13 @@ public class MessageBuilderTests
     public void GetMailboxAddressObj_ValidEmailAddressWithDisplayName_ReturnsCompoundEmailAddress()
     {
         // Arrange
-        var messageBuilder = CreateMessageBuilder();
         var emailAddress = "test@email.com";
         var displayName = "Testy McTesterson";
 
         var compoundAddress = $"{displayName} <{emailAddress}>";
 
         // Act
-        var mailboxAddressObj = messageBuilder.GetMailboxAddressObj(compoundAddress);
+        var mailboxAddressObj = MessageBuilder.GetMailboxAddressObj(compoundAddress);
 
         // Assert
         Assert.Equal(mailboxAddressObj.Address, emailAddress);

@@ -27,7 +27,7 @@ public class FileProcessorTests
         return mockFileSystem.Object;
     }
 
-    private FileProcessor CreateFileProcessor(string filePath, IFileSystem fileSystem)
+    private static FileProcessor CreateFileProcessor(string filePath, IFileSystem fileSystem)
     {
         return new FileProcessor(filePath, fileSystem);
     }

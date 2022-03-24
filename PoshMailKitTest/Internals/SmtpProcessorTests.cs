@@ -17,7 +17,7 @@ public class SmtpProcessorTests
         mockRepository = new MockRepository(MockBehavior.Strict);
     }
 
-    private SmtpProcessor CreateSmtpProcessor(PMKSmtpClient mockClient)
+    private static SmtpProcessor CreateSmtpProcessor(PMKSmtpClient mockClient)
     {
         return new SmtpProcessor(mockClient);
     }

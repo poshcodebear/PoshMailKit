@@ -58,7 +58,7 @@ public class MessageBuilder
         message = new MimeMessage();
     }
 
-    public MailboxAddress GetMailboxAddressObj(string email)
+    public static MailboxAddress GetMailboxAddressObj(string email)
     {
         string displayName = "";
         var regexResult = EmailWithDisplayNamePattern.Match(email);
