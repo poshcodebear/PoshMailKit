@@ -1,11 +1,10 @@
-﻿namespace PoshMailKit.Internals
+﻿namespace PoshMailKit.Internals;
+
+public enum DeliveryNotificationOptions
 {
-    public enum DeliveryNotificationOptions
-    {
-        None,
-        OnSuccess,
-        OnFailure,
-        Delay,
-        Never = 134217728,
-    }
+    None,
+    OnSuccess,
+    OnFailure,
+    Delay,
+    Never = 134217728,
 }
