@@ -365,76 +365,46 @@ public class SendMKMailMessage : PSCmdlet
 
     private void SetLegacyPriority()
     {
-        // Translate priority; Enum default is Normal
-        switch (Priority)
+        MessagePriority = Priority switch
         {
-            case MailPriority.Normal:
-                MessagePriority = MessagePriority.Normal;
-                break;
-            case MailPriority.Low:
-                MessagePriority = MessagePriority.NonUrgent;
-                break;
-            case MailPriority.High:
-                MessagePriority = MessagePriority.Urgent;
-                break;
-        }
+            MailPriority.Low  => MessagePriority.NonUrgent,
+            MailPriority.High => MessagePriority.Urgent,
+            _                 => MessagePriority.Normal,
+        };
     }
 
     private void SetLegacyEncoding()
     {
-        // Translate Encoding; Enum default is ASCII
-        ContentTransferEncoding = ContentEncoding.QuotedPrintable;
-        switch (Encoding)
+        ContentTransferEncoding = Encoding switch
         {
-            case Encoding.ASCII:
-                CharsetEncoding = System.Text.Encoding.ASCII;
-                break;
-            case Encoding.BigEndianUnicode:
-                CharsetEncoding = System.Text.Encoding.BigEndianUnicode;
-                ContentTransferEncoding = ContentEncoding.Base64;
-                break;
-            case Encoding.BigEndianUTF32:
-                CharsetEncoding = System.Text.Encoding.GetEncoding("utf-32BE");
-                break;
-            case Encoding.Unicode:
-                CharsetEncoding = System.Text.Encoding.Unicode;
-                ContentTransferEncoding = ContentEncoding.Base64;
-                break;
-            case Encoding.UTF8:
-                CharsetEncoding = System.Text.Encoding.UTF8;
-                break;
-            case Encoding.UTF8BOM:
-                CharsetEncoding = System.Text.Encoding.UTF8;
-                ContentTransferEncoding = ContentEncoding.Base64;
-                break;
-            case Encoding.UTF8NoBOM:
-                CharsetEncoding = System.Text.Encoding.UTF8;
-                break;
-            case Encoding.UTF32:
-                CharsetEncoding = System.Text.Encoding.UTF32;
-                ContentTransferEncoding = ContentEncoding.Base64;
-                break;
-        }
+            Encoding.BigEndianUnicode or Encoding.Unicode or Encoding.UTF8BOM or Encoding.UTF32
+                => ContentEncoding.Base64,
+            _   => ContentEncoding.QuotedPrintable,
+        };
+
+        CharsetEncoding = Encoding switch
+        {
+            Encoding.ASCII            => System.Text.Encoding.ASCII,
+            Encoding.BigEndianUnicode => System.Text.Encoding.BigEndianUnicode,
+            Encoding.BigEndianUTF32   => System.Text.Encoding.GetEncoding("utf-32BE"),
+            Encoding.Unicode          => System.Text.Encoding.Unicode,
+            Encoding.UTF32            => System.Text.Encoding.UTF32,
+            Encoding.UTF8 or
+            Encoding.UTF8NoBOM or
+            Encoding.UTF8BOM or
+            _                         => System.Text.Encoding.UTF8,
+        };
     }
 
     private void SetLegacyNotification()
     {
-        // Translate notification; default is null and does nothing
-        switch (DeliveryNotificationOption)
+        DeliveryStatusNotification = DeliveryNotificationOption switch
         {
-            case DeliveryNotificationOptions.OnSuccess:
-                DeliveryStatusNotification = MailKit.DeliveryStatusNotification.Success;
-                break;
-            case DeliveryNotificationOptions.OnFailure:
-                DeliveryStatusNotification = MailKit.DeliveryStatusNotification.Failure;
-                break;
-            case DeliveryNotificationOptions.Delay:
-                DeliveryStatusNotification = MailKit.DeliveryStatusNotification.Delay;
-                break;
-            case DeliveryNotificationOptions.Never:
-                DeliveryStatusNotification = MailKit.DeliveryStatusNotification.Never;
-                break;
-        }
+            DeliveryNotificationOptions.OnSuccess => MailKit.DeliveryStatusNotification.Success,
+            DeliveryNotificationOptions.OnFailure => MailKit.DeliveryStatusNotification.Failure,
+            DeliveryNotificationOptions.Delay     => MailKit.DeliveryStatusNotification.Delay,
+            _                                     => MailKit.DeliveryStatusNotification.Never,
+        };
     }
 
     private void SetLegacyBodyFormat()
