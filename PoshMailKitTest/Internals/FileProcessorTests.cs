@@ -12,9 +12,9 @@ namespace PoshMailKitTest.Internals;
 
 public class FileProcessorTests
 {
-    private MockRepository mockRepository;
+    private readonly MockRepository mockRepository;
 
-    private Mock<IFileSystem> mockFileSystem;
+    private readonly Mock<IFileSystem> mockFileSystem;
 
     public FileProcessorTests()
     {

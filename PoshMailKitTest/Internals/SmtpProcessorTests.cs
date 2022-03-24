@@ -10,7 +10,7 @@ namespace PoshMailKitTest.Internals;
 
 public class SmtpProcessorTests
 {
-    private MockRepository mockRepository;
+    private readonly MockRepository mockRepository;
 
     public SmtpProcessorTests()
     {

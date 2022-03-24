@@ -7,11 +7,11 @@ namespace PoshMailKit.Internals;
 public class MessageBuilder
 {
     // Properties
-    private MimeMessage message { get; set; }
+    private readonly MimeMessage message;
     private TextPart TextMailBody { get; set; }
     private Multipart MultipartMailBody { get; set; }
 
-    private static Regex EmailWithDisplayNamePattern = new("^(?<DisplayName>[^<]+)<(?<Email>[^>]+)>$");
+    private static readonly Regex EmailWithDisplayNamePattern = new("^(?<DisplayName>[^<]+)<(?<Email>[^>]+)>$");
 
     // Setters
     public string Subject { set => message.Subject = value; }

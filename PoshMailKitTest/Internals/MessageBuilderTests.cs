@@ -11,7 +11,7 @@ namespace PoshMailKitTest.Internals;
 
 public class MessageBuilderTests
 {
-    private MockRepository mockRepository;
+    private readonly MockRepository mockRepository;
 
     public MessageBuilderTests()
     {
