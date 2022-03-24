@@ -15,7 +15,8 @@
             <para>Send-MKMailMessage is designed to be a drop-in replacement of Send-MailMessage, which uses the deprecated System.Net.Mail.SmtpClient class and does not guarantee secure connections to SMTP servers. It uses the cross-platform mail client library MailKit (https://github.com/jstedfast/MailKit) to replace the functionality from System.Net.Mail.SmtpClient.</para>
         </description>
         <syntax>
-            <syntaxItem> <!-- Modern -->
+			<!-- Modern -->
+			<syntaxItem>
                 <name>Send-MKMailMessage</name>
                 <parameter required="true" globbing="false" pipelineInput="true (ByPropertyName)" position="0">
                     <name>To</name>
@@ -109,7 +110,8 @@
                     </parameterValueGroup>
                 </parameter>
             </syntaxItem>
-            <syntaxItem> <!-- Legacy -->
+			<!-- Legacy -->
+			<syntaxItem>
                 <name>Send-MKMailMessage</name>
                 <parameter required="true" globbing="false" pipelineInput="true (ByPropertyName)" position="0">
                     <name>To</name>
@@ -169,9 +171,7 @@
                         <parameterValue>ASCII</parameterValue>
                         <parameterValue>BigEndianUnicode</parameterValue>
                         <parameterValue>Default</parameterValue>
-                        <parameterValue>OEM</parameterValue>
                         <parameterValue>Unicode</parameterValue>
-                        <parameterValue>UTF7</parameterValue>
                         <parameterValue>UTF8</parameterValue>
                         <parameterValue>UTF32</parameterValue>
                     </parameterValueGroup>
@@ -387,9 +387,7 @@
                         <listItem><para>ASCII: Uses ASCII (7-bit) character set</para></listItem>
                         <listItem><para>BigEndianUnicode: Uses UTF-16 with the big-endian byte order</para></listItem>
                         <listItem><para>BigEndianUTF32: Uses UTF-32 with the big-endian byte order</para></listItem>
-                        <!--listItem><para>OEM: Uses the encoding that corresponds to the system's current OEM code page</para></listItem-->
                         <listItem><para>Unicode: Uses UTF-16 with the little-endian byte order</para></listItem>
-                        <listItem><para>UTF7: Uses UTF-7</para></listItem>
                         <listItem><para>UTF8: Uses UTF-8</para></listItem>
                         <listItem><para>UTF8BOM: Uses UTF-8, explicitly with BOM</para></listItem>
                         <listItem><para>UTF8NoBOM: Uses UTF-8, explicitly without BOM</para></listItem>
