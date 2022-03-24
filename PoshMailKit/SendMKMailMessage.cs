@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Management.Automation;
 using MimeKit;
 using MimeKit.Text;
@@ -265,7 +265,6 @@ public class SendMKMailMessage : PSCmdlet
 
     #endregion
 
-    private MessageBuilder MailMessage { get; set; }
     private List<MimePart> FilesToAttach { get; set; }
 
     protected override void BeginProcessing()
@@ -276,7 +275,7 @@ public class SendMKMailMessage : PSCmdlet
 
     protected override void ProcessRecord()
     {
-        MailMessage = new MessageBuilder
+        MessageBuilder MailMessageBuilder = new()
         {
             Subject = Subject,
             Priority = MessagePriority,
@@ -287,15 +286,15 @@ public class SendMKMailMessage : PSCmdlet
             ReplyTo = ReplyTo,
         };
 
-        MailMessage.NewMailBody(BodyFormat, CharsetEncoding, Body, ContentTransferEncoding);
-        MailMessage.AddAttachments(FilesToAttach);
+        MailMessageBuilder.NewMailBody(BodyFormat, CharsetEncoding, Body, ContentTransferEncoding);
+        MailMessageBuilder.AddAttachments(FilesToAttach);
 
         SmtpProcessor processor = new()
         {
             SmtpServer = SmtpServer,
             SmtpPort = Port,
             SecureSocketOptions = SecureSocketOptions,
-            Message = MailMessage.Message,
+            Message = MailMessageBuilder.Message,
             Notification = DeliveryStatusNotification,
         };
 

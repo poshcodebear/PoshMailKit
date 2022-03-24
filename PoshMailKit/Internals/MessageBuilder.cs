@@ -7,7 +7,6 @@ namespace PoshMailKit.Internals;
 public class MessageBuilder
 {
     // Properties
-    private readonly MimeMessage message;
     private TextPart TextMailBody { get; set; }
     private Multipart MultipartMailBody { get; set; }
 
@@ -34,6 +33,7 @@ public class MessageBuilder
                 foreach (var v in value)
                     message.ReplyTo.Add(GetMailboxAddressObj(v)); } }
 
+    private readonly MimeMessage message;
     public MimeMessage Message
     {
         get
@@ -55,13 +55,13 @@ public class MessageBuilder
 
     public MessageBuilder()
     {
-        message = new MimeMessage();
+        message = new();
     }
 
     public static MailboxAddress GetMailboxAddressObj(string email)
     {
         string displayName = "";
-        var regexResult = EmailWithDisplayNamePattern.Match(email);
+        Match regexResult = EmailWithDisplayNamePattern.Match(email);
         if (regexResult.Success)
         {
             displayName = regexResult.Groups["DisplayName"].Value.Trim();
@@ -79,7 +79,7 @@ public class MessageBuilder
         {
             if (MultipartMailBody is null)
             {
-                MultipartMailBody = new Multipart("mixed");
+                MultipartMailBody = new("mixed");
             }
 
             foreach (MimePart attachment in filesToAttach)
@@ -92,8 +92,10 @@ public class MessageBuilder
                              string body,
                              ContentEncoding contentTransferEncoding)
     {
-        TextMailBody = new TextPart(format);
-        TextMailBody.ContentTransferEncoding = contentTransferEncoding;
+        TextMailBody = new(format)
+        {
+            ContentTransferEncoding = contentTransferEncoding
+        };
         if (body is not null)
             TextMailBody.SetText(charsetEncoding, body);
     }
