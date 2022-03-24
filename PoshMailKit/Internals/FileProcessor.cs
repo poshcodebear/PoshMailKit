@@ -1,5 +1,4 @@
 ﻿using MimeKit;
-using System.IO;
 using System.IO.Abstractions;
 using System.Text.RegularExpressions;
 

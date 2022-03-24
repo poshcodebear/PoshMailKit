@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.Management.Automation;
 using MimeKit;
 using MimeKit.Text;
@@ -7,7 +6,6 @@ using PoshMailKit.Internals;
 using MailKit;
 using MailKit.Security;
 using System.Net;
-using System;
 
 namespace PoshMailKit;
 

@@ -1,6 +1,5 @@
 ﻿using MimeKit;
 using MimeKit.Text;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace PoshMailKit.Internals;

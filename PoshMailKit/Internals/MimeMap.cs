@@ -1,5 +1,4 @@
 ﻿using MimeKit;
-using System.Collections.Generic;
 
 namespace PoshMailKit.Internals;
 
