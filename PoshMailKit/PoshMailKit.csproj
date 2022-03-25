@@ -49,11 +49,17 @@
     </None>
   </ItemGroup>
   
+  <ItemGroup>
+    <None Update="Build\BuildConfig.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Build\BuildScript.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="pwsh.exe -C &quot;if (Test-Path '$(TargetDir)PoshMailKit') {Remove-Item -Path '$(TargetDir)PoshMailKit' -Recurse -Force -ea ignore}&quot;" />
-    <Exec Command="pwsh.exe -C &quot;New-Item -Path '$(TargetDir)PoshMailKit' -Type Directory&quot;" />
-    <Exec Command="pwsh.exe -C &quot;Copy-Item -Path '$(TargetDir)*.dll' -Destination '$(TargetDir)PoshMailKit\'&quot;" />
-    <Exec Command="pwsh.exe -C &quot;Copy-Item -Path '$(TargetDir)ModuleMembers\*' -Destination '$(TargetDir)PoshMailKit\' -Recurse&quot;" />
+    <Exec Command="pwsh.exe -C &quot;&amp; '$(TargetDir)\Build\BuildScript.ps1'&quot;" />
   </Target>
   
 </Project>

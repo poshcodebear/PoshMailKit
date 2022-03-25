@@ -1,0 +1,9 @@
+{
+  "FileList": [
+    "PoshMailKit.dll",
+    "MailKit.dll",
+    "MimeKit.dll",
+    "BouncyCastle.Crypto.dll",
+    "System.IO.Abstractions.dll"
+  ]
+}
