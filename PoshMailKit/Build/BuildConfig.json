@@ -1,0 +1,12 @@
+{
+  "Name": "PoshMailKit",
+  "Version": "2.0.0",
+  "PreReleaseTag": "alpha3",
+  "FileList": [
+    "PoshMailKit.dll",
+    "MailKit.dll",
+    "MimeKit.dll",
+    "BouncyCastle.Crypto.dll",
+    "System.IO.Abstractions.dll"
+  ]
+}
