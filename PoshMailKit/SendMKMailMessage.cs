@@ -200,6 +200,14 @@ namespace PoshMailKit
         public MessagePriority MessagePriority { get; set; } = MessagePriority.Normal;
         #endregion
 
+        #region Parameter: RequireSecureConnection
+        // Legacy counterpart: -UseSsl
+        [Parameter(
+            ParameterSetName = "Modern",
+            ValueFromPipelineByPropertyName = true)]
+        public SwitchParameter RequireSecureConnection { get; set; }
+        #endregion
+
         #region Parameter: SecureSocketOptions
         // Legacy counterpart: -UseSsl
         [Parameter(
@@ -256,7 +264,7 @@ namespace PoshMailKit
         #endregion
 
         #region Parameter: UseSsl
-        // Modern counterpart: -SecureSocketOptions
+        // Modern counterpart: -SecureSocketOptions Auto -RequireSecureConnection
         [Parameter(
             ParameterSetName = "Legacy",
             ValueFromPipelineByPropertyName = true)]
@@ -299,6 +307,7 @@ namespace PoshMailKit
                 SecureSocketOptions = SecureSocketOptions,
                 Message = MailMessage.Message,
                 Notification = DeliveryStatusNotification,
+                RequireSecureConnection = RequireSecureConnection,
             };
 
             if (Credential != null)
@@ -361,7 +370,9 @@ namespace PoshMailKit
 
         private void SetLegacySsl()
         {
-            if (!UseSsl)
+            if (UseSsl)
+                RequireSecureConnection = true;
+            else
                 SecureSocketOptions = SecureSocketOptions.None;
         }
 
