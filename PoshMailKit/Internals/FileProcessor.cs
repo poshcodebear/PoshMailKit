@@ -14,7 +14,7 @@ namespace PoshMailKit.Internals
         public FileProcessor(string workingDirectory, IFileSystem fileSystem)
         {
             FileSystem = fileSystem;
-            WorkingDirectory = workingDirectory;
+            WorkingDirectory = CleanWorkingDirectory(workingDirectory);
         }
 
         public FileProcessor(string workingDirectory)
@@ -46,6 +46,11 @@ namespace PoshMailKit.Internals
                 mimePart.ContentId = label;
 
             return mimePart;
+        }
+
+        private string CleanWorkingDirectory(string workingDirectory)
+        {
+            return Regex.Replace(workingDirectory, "^.*::", "");
         }
     }
     public enum ContentDispositionType { Attachment, Inline }
