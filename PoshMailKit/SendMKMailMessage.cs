@@ -189,7 +189,7 @@ namespace PoshMailKit
         [Parameter(
             ParameterSetName = "Modern",
             ValueFromPipelineByPropertyName = true)]
-        public DeliveryStatusNotification? DeliveryStatusNotification { get; set; }
+        public DeliveryStatusNotification DeliveryStatusNotification { get; set; }
         #endregion
 
         #region Parameter: MessagePriority
@@ -198,6 +198,14 @@ namespace PoshMailKit
             ParameterSetName = "Modern",
             ValueFromPipelineByPropertyName = true)]
         public MessagePriority MessagePriority { get; set; } = MessagePriority.Normal;
+        #endregion
+
+        #region Parameter: RequireSecureConnection
+        // Legacy counterpart: -UseSsl
+        [Parameter(
+            ParameterSetName = "Modern",
+            ValueFromPipelineByPropertyName = true)]
+        public SwitchParameter RequireSecureConnection { get; set; }
         #endregion
 
         #region Parameter: SecureSocketOptions
@@ -256,7 +264,7 @@ namespace PoshMailKit
         #endregion
 
         #region Parameter: UseSsl
-        // Modern counterpart: -SecureSocketOptions
+        // Modern counterpart: -SecureSocketOptions Auto -RequireSecureConnection
         [Parameter(
             ParameterSetName = "Legacy",
             ValueFromPipelineByPropertyName = true)]
@@ -299,12 +307,31 @@ namespace PoshMailKit
                 SecureSocketOptions = SecureSocketOptions,
                 Message = MailMessage.Message,
                 Notification = DeliveryStatusNotification,
+                RequireSecureConnection = RequireSecureConnection,
             };
 
             if (Credential != null)
                 processor.Credential = (NetworkCredential)Credential;
 
-            processor.SendMailMessage();
+            try
+            {
+                processor.SendMailMessage();
+            }
+            catch (Exception ex)
+            {
+                string errorId = "UnableToSendToServer";
+                ErrorCategory category = ErrorCategory.OperationStopped;
+                if (ex is InvalidOperationException)
+                {
+                    errorId = "SecureConnectionRequirementsNotMet";
+                    category = ErrorCategory.SecurityError;
+                }
+
+                ErrorRecord errorRecord = new ErrorRecord(ex, errorId, category, processor);
+                string errorDetails = $"{SmtpServer}:{Port} (SSO:{SecureSocketOptions})";
+                errorRecord.ErrorDetails = new ErrorDetails($"{ex.Message} ({errorDetails})");
+                WriteError(errorRecord);
+            }
         }
 
         private void ProcessParameters()
@@ -361,7 +388,9 @@ namespace PoshMailKit
 
         private void SetLegacySsl()
         {
-            if (!UseSsl)
+            if (UseSsl)
+                RequireSecureConnection = true;
+            else
                 SecureSocketOptions = SecureSocketOptions.None;
         }
 
@@ -428,22 +457,7 @@ namespace PoshMailKit
 
         private void SetLegacyNotification()
         {
-            // Translate notification; default is null and does nothing
-            switch (DeliveryNotificationOption)
-            {
-                case DeliveryNotificationOptions.OnSuccess:
-                    DeliveryStatusNotification = MailKit.DeliveryStatusNotification.Success;
-                    break;
-                case DeliveryNotificationOptions.OnFailure:
-                    DeliveryStatusNotification = MailKit.DeliveryStatusNotification.Failure;
-                    break;
-                case DeliveryNotificationOptions.Delay:
-                    DeliveryStatusNotification = MailKit.DeliveryStatusNotification.Delay;
-                    break;
-                case DeliveryNotificationOptions.Never:
-                    DeliveryStatusNotification = MailKit.DeliveryStatusNotification.Never;
-                    break;
-            }
+            DeliveryStatusNotification = (DeliveryStatusNotification)DeliveryNotificationOption;
         }
 
         private void SetLegacyBodyFormat()
