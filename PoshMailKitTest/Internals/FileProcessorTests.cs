@@ -107,6 +107,24 @@ public class FileProcessorTests
             $"Actual: {result}, expected: {expectedReturnPath}");
         mockRepository.VerifyAll();
     }
+    [Fact]
+    public void GetFullPathName_FileRelativeNetworkPath_WithExtendedTypePath_ReturnsFullPath()
+    {
+        // Arrange
+        var fileName = @".\test.txt";
+        var filePath = @"Microsoft.PowerShell.Core\FileSystem::\\srv\test\tmp";
+        var expectedReturnPath = @"\\srv\test\tmp\test.txt";
+
+        var fileProcessor = CreateFileProcessor(filePath, GetMockFileSystem());
+
+        // Act
+        var result = fileProcessor.GetFullPathName(fileName);
+
+        // Assert
+        Assert.True(result == expectedReturnPath,
+            $"Actual: {result}, expected: {expectedReturnPath}");
+        mockRepository.VerifyAll();
+    }
 
     [Fact]
     public void GetFullPathName_FileRelativeNetworkPathMixedPathSeparators_ReturnsFullPath()

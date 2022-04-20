@@ -15,8 +15,8 @@
             <para>Send-MKMailMessage is designed to be a drop-in replacement of Send-MailMessage, which uses the deprecated System.Net.Mail.SmtpClient class and does not guarantee secure connections to SMTP servers. It uses the cross-platform mail client library MailKit (https://github.com/jstedfast/MailKit) to replace the functionality from System.Net.Mail.SmtpClient.</para>
         </description>
         <syntax>
-			<!-- Modern -->
-			<syntaxItem>
+            <!-- Modern -->
+            <syntaxItem>
                 <name>Send-MKMailMessage</name>
                 <parameter required="true" globbing="false" pipelineInput="true (ByPropertyName)" position="0">
                     <name>To</name>
@@ -100,6 +100,9 @@
                     <parameterValue required="true">string[]</parameterValue>
                 </parameter>
                 <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>RequireSecureConnection</name>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
                     <name>SecureSocketOptions</name>
                     <parameterValueGroup>
                         <parameterValue>None</parameterValue>
@@ -110,8 +113,8 @@
                     </parameterValueGroup>
                 </parameter>
             </syntaxItem>
-			<!-- Legacy -->
-			<syntaxItem>
+            <!-- Legacy -->
+            <syntaxItem>
                 <name>Send-MKMailMessage</name>
                 <parameter required="true" globbing="false" pipelineInput="true (ByPropertyName)" position="0">
                     <name>To</name>
@@ -497,6 +500,16 @@
                 </description>
                 <parameterValue required="true">System.String[]</parameterValue>
                 <defaultValue>None</defaultValue>
+            </parameter>
+            <!-- RequireSecureConnection -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="none">
+                <name>RequireSecureConnection</name>
+                <description>
+                    <para>Requires connections to be secured by SSL or TLS before proceeding to authentication or sending. This ensures a connection established using SecureSocketOptions = Auto will not default to a non-secured connection if the connecting server does not support any secure protocols, without having to specify which secure connection type to use.</para>
+                    <para>Parameter sets: Modern</para>
+                </description>
+                <parameterValue required="true">SwitchParameter</parameterValue>
+                <defaultValue>False</defaultValue>
             </parameter>
             <!-- SecureSocketOptions -->
             <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="none">

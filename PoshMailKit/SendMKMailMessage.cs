@@ -187,7 +187,7 @@ public class SendMKMailMessage : PSCmdlet
     [Parameter(
         ParameterSetName = "Modern",
         ValueFromPipelineByPropertyName = true)]
-    public DeliveryStatusNotification? DeliveryStatusNotification { get; set; }
+    public DeliveryStatusNotification DeliveryStatusNotification { get; set; }
     #endregion
 
     #region Parameter: MessagePriority
@@ -196,6 +196,14 @@ public class SendMKMailMessage : PSCmdlet
         ParameterSetName = "Modern",
         ValueFromPipelineByPropertyName = true)]
     public MessagePriority MessagePriority { get; set; } = MessagePriority.Normal;
+    #endregion
+
+    #region Parameter: RequireSecureConnection
+    // Legacy counterpart: -UseSsl
+    [Parameter(
+        ParameterSetName = "Modern",
+        ValueFromPipelineByPropertyName = true)]
+    public SwitchParameter RequireSecureConnection { get; set; }
     #endregion
 
     #region Parameter: SecureSocketOptions
@@ -254,7 +262,7 @@ public class SendMKMailMessage : PSCmdlet
     #endregion
 
     #region Parameter: UseSsl
-    // Modern counterpart: -SecureSocketOptions
+    // Modern counterpart: -SecureSocketOptions Auto -RequireSecureConnection
     [Parameter(
         ParameterSetName = "Legacy",
         ValueFromPipelineByPropertyName = true)]
@@ -296,12 +304,31 @@ public class SendMKMailMessage : PSCmdlet
             SecureSocketOptions = SecureSocketOptions,
             Message = MailMessageBuilder.Message,
             Notification = DeliveryStatusNotification,
+            RequireSecureConnection = RequireSecureConnection,
         };
 
         if (Credential is not null)
             processor.Credential = (NetworkCredential)Credential;
 
-        processor.SendMailMessage();
+        try
+        {
+            processor.SendMailMessage();
+        }
+        catch (Exception ex)
+        {
+            string errorId = "UnableToSendToServer";
+            ErrorCategory category = ErrorCategory.OperationStopped;
+            if (ex is InvalidOperationException)
+            {
+                errorId = "SecureConnectionRequirementsNotMet";
+                category = ErrorCategory.SecurityError;
+            }
+
+            ErrorRecord errorRecord = new ErrorRecord(ex, errorId, category, processor);
+            string errorDetails = $"{SmtpServer}:{Port} (SSO:{SecureSocketOptions})";
+            errorRecord.ErrorDetails = new ErrorDetails($"{ex.Message} ({errorDetails})");
+            WriteError(errorRecord);
+        }
     }
 
     private void ProcessParameters()
@@ -358,7 +385,9 @@ public class SendMKMailMessage : PSCmdlet
 
     private void SetLegacySsl()
     {
-        if (!UseSsl)
+        if (UseSsl)
+            RequireSecureConnection = true;
+        else
             SecureSocketOptions = SecureSocketOptions.None;
     }
 
@@ -397,13 +426,7 @@ public class SendMKMailMessage : PSCmdlet
 
     private void SetLegacyNotification()
     {
-        DeliveryStatusNotification = DeliveryNotificationOption switch
-        {
-            DeliveryNotificationOptions.OnSuccess => MailKit.DeliveryStatusNotification.Success,
-            DeliveryNotificationOptions.OnFailure => MailKit.DeliveryStatusNotification.Failure,
-            DeliveryNotificationOptions.Delay     => MailKit.DeliveryStatusNotification.Delay,
-            _                                     => MailKit.DeliveryStatusNotification.Never,
-        };
+        DeliveryStatusNotification = (DeliveryStatusNotification)DeliveryNotificationOption;
     }
 
     private void SetLegacyBodyFormat()

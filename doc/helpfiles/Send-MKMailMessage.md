@@ -21,7 +21,7 @@ Send-MKMailMessage [-Attachments <String[]>] [-Bcc <String[]>] [[-Body] <String>
  [-ReplyTo <String[]>] [[-SmtpServer] <String>] [[-Subject] <String>] [-To] <String[]>
  [-BodyFormat <TextFormat>] [-CharsetEncoding <Encoding>] [-ContentTransferEncoding <ContentEncoding>]
  [-DeliveryStatusNotification <DeliveryStatusNotification>] [-MessagePriority <MessagePriority>]
- [-SecureSocketOptions <SecureSocketOptions>] [<CommonParameters>]
+ [-RequireSecureConnection] [-SecureSocketOptions <SecureSocketOptions>] [<CommonParameters>]
 ```
 
 ### Legacy
@@ -506,6 +506,25 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -RequireSecureConnection
+
+Requires connections to be secured by SSL or TLS before proceeding to authentication or sending.
+
+This ensures a connection established using SecureSocketOptions = Auto will not default to a non-secured connection if the connecting
+server does not support any secure protocols, without having to specify which secure connection type to use.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Modern
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
