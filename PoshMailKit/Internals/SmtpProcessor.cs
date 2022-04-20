@@ -14,6 +14,16 @@ public class SmtpProcessor
     public DeliveryStatusNotification? Notification { get; set; }
     public SecureSocketOptions SecureSocketOptions { get; set; }
     public NetworkCredential Credential { get; set; }
+    public bool RequireSecureConnection { get; set; }
+    private bool SecureConnectionRequirementsMet
+    {
+        get
+        {
+            if (RequireSecureConnection && !Client.IsSecure)
+                return false;
+            return true;
+        }
+    }
 
     public SmtpProcessor(PMKSmtpClient client)
     {
@@ -32,9 +42,14 @@ public class SmtpProcessor
         if (SmtpServer is not null && Message is not null)
         {
             Client.Connect(SmtpServer, SmtpPort, SecureSocketOptions);
-            if (Credential is not null)
-                Client.Authenticate(Credential);
-            Client.Send(Message);
+            if (SecureConnectionRequirementsMet)
+            {
+                if (Credential is not null)
+                    Client.Authenticate(Credential);
+                Client.Send(Message);
+            }
+            else
+                throw new System.InvalidOperationException("SecureConnection requirements not met, unable to send");
             Client.Disconnect(true);
         }
     }
