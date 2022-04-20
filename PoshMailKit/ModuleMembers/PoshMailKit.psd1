@@ -108,10 +108,10 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'https://github.com/poshcodebear/PoshMailKit/releases/tag/v1.0.0'
+        ReleaseNotes = 'https://github.com/poshcodebear/PoshMailKit/releases/tag/v1.1.0'
 
         # Prerelease string of this module
-        Prerelease = 'beta3'
+        #Prerelease = ''
 
         # Flag to indicate whether the module requires explicit user acceptance for install/update/save
         # RequireLicenseAcceptance = $false
