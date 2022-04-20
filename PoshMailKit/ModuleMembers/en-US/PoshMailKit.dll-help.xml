@@ -99,6 +99,9 @@
                     <parameterValue required="true">string[]</parameterValue>
                 </parameter>
                 <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
+                    <name>RequireSecureConnection</name>
+                </parameter>
+                <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named">
                     <name>SecureSocketOptions</name>
                     <parameterValueGroup>
                         <parameterValue>None</parameterValue>
@@ -499,6 +502,16 @@
                 </description>
                 <parameterValue required="true">System.String[]</parameterValue>
                 <defaultValue>None</defaultValue>
+            </parameter>
+            <!-- RequireSecureConnection -->
+            <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="none">
+                <name>RequireSecureConnection</name>
+                <description>
+                    <para>Requires connections to be secured by SSL or TLS before proceeding to authentication or sending. This ensures a connection established using SecureSocketOptions = Auto will not default to a non-secured connection if the connecting server does not support any secure protocols, without having to specify which secure connection type to use.</para>
+                    <para>Parameter sets: Modern</para>
+                </description>
+                <parameterValue required="true">SwitchParameter</parameterValue>
+                <defaultValue>False</defaultValue>
             </parameter>
             <!-- SecureSocketOptions -->
             <parameter required="false" globbing="false" pipelineInput="true (ByPropertyName)" position="named" aliases="none">

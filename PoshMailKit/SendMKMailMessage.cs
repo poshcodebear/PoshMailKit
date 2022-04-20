@@ -200,6 +200,14 @@ namespace PoshMailKit
         public MessagePriority MessagePriority { get; set; } = MessagePriority.Normal;
         #endregion
 
+        #region Parameter: RequireSecureConnection
+        // Legacy counterpart: -UseSsl
+        [Parameter(
+            ParameterSetName = "Modern",
+            ValueFromPipelineByPropertyName = true)]
+        public SwitchParameter RequireSecureConnection { get; set; }
+        #endregion
+
         #region Parameter: SecureSocketOptions
         // Legacy counterpart: -UseSsl
         [Parameter(
@@ -256,7 +264,7 @@ namespace PoshMailKit
         #endregion
 
         #region Parameter: UseSsl
-        // Modern counterpart: -SecureSocketOptions
+        // Modern counterpart: -SecureSocketOptions Auto -RequireSecureConnection
         [Parameter(
             ParameterSetName = "Legacy",
             ValueFromPipelineByPropertyName = true)]
@@ -299,12 +307,31 @@ namespace PoshMailKit
                 SecureSocketOptions = SecureSocketOptions,
                 Message = MailMessage.Message,
                 Notification = DeliveryStatusNotification,
+                RequireSecureConnection = RequireSecureConnection,
             };
 
             if (Credential != null)
                 processor.Credential = (NetworkCredential)Credential;
 
-            processor.SendMailMessage();
+            try
+            {
+                processor.SendMailMessage();
+            }
+            catch (Exception ex)
+            {
+                string errorId = "UnableToSendToServer";
+                ErrorCategory category = ErrorCategory.OperationStopped;
+                if (ex is InvalidOperationException)
+                {
+                    errorId = "SecureConnectionRequirementsNotMet";
+                    category = ErrorCategory.SecurityError;
+                }
+
+                ErrorRecord errorRecord = new ErrorRecord(ex, errorId, category, processor);
+                string errorDetails = $"{SmtpServer}:{Port} (SSO:{SecureSocketOptions})";
+                errorRecord.ErrorDetails = new ErrorDetails($"{ex.Message} ({errorDetails})");
+                WriteError(errorRecord);
+            }
         }
 
         private void ProcessParameters()
@@ -361,7 +388,9 @@ namespace PoshMailKit
 
         private void SetLegacySsl()
         {
-            if (!UseSsl)
+            if (UseSsl)
+                RequireSecureConnection = true;
+            else
                 SecureSocketOptions = SecureSocketOptions.None;
         }
 

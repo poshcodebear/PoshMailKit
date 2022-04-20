@@ -12,7 +12,7 @@
 # RootModule = ''
 
 # Version number of this module.
-ModuleVersion = '1.0.1'
+ModuleVersion = '1.1.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -111,7 +111,7 @@ PrivateData = @{
         ReleaseNotes = 'https://github.com/poshcodebear/PoshMailKit/releases/tag/v1.0.0'
 
         # Prerelease string of this module
-        Prerelease = 'beta1'
+        Prerelease = 'beta2'
 
         # Flag to indicate whether the module requires explicit user acceptance for install/update/save
         # RequireLicenseAcceptance = $false
