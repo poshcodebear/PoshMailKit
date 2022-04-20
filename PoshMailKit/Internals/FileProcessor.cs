@@ -10,11 +10,11 @@ public class FileProcessor
     private readonly IFileSystem FileSystem;
     private readonly Regex pathPattern = new(@"^([a-zA-Z]:|//|\\\\)");
 
-        public FileProcessor(string workingDirectory, IFileSystem fileSystem)
-        {
-            FileSystem = fileSystem;
-            WorkingDirectory = CleanWorkingDirectory(workingDirectory);
-        }
+    public FileProcessor(string workingDirectory, IFileSystem fileSystem)
+    {
+        FileSystem = fileSystem;
+        WorkingDirectory = CleanWorkingDirectory(workingDirectory);
+    }
 
     public FileProcessor(string workingDirectory)
         : this(workingDirectory, fileSystem: new FileSystem())
