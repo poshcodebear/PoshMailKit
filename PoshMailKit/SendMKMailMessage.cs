@@ -313,7 +313,25 @@ namespace PoshMailKit
             if (Credential != null)
                 processor.Credential = (NetworkCredential)Credential;
 
-            processor.SendMailMessage();
+            try
+            {
+                processor.SendMailMessage();
+            }
+            catch (Exception ex)
+            {
+                string errorId = "UnableToSendToServer";
+                ErrorCategory category = ErrorCategory.OperationStopped;
+                if (ex is InvalidOperationException)
+                {
+                    errorId = "SecureConnectionRequirementsNotMet";
+                    category = ErrorCategory.SecurityError;
+                }
+
+                ErrorRecord errorRecord = new ErrorRecord(ex, errorId, category, processor);
+                string errorDetails = $"{SmtpServer}:{Port} (SSO:{SecureSocketOptions})";
+                errorRecord.ErrorDetails = new ErrorDetails($"{ex.Message} ({errorDetails})");
+                WriteError(errorRecord);
+            }
         }
 
         private void ProcessParameters()
