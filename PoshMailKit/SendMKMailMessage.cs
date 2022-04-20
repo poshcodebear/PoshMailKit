@@ -187,7 +187,7 @@ public class SendMKMailMessage : PSCmdlet
     [Parameter(
         ParameterSetName = "Modern",
         ValueFromPipelineByPropertyName = true)]
-    public DeliveryStatusNotification? DeliveryStatusNotification { get; set; }
+    public DeliveryStatusNotification DeliveryStatusNotification { get; set; }
     #endregion
 
     #region Parameter: MessagePriority
@@ -426,13 +426,7 @@ public class SendMKMailMessage : PSCmdlet
 
     private void SetLegacyNotification()
     {
-        DeliveryStatusNotification = DeliveryNotificationOption switch
-        {
-            DeliveryNotificationOptions.OnSuccess => MailKit.DeliveryStatusNotification.Success,
-            DeliveryNotificationOptions.OnFailure => MailKit.DeliveryStatusNotification.Failure,
-            DeliveryNotificationOptions.Delay     => MailKit.DeliveryStatusNotification.Delay,
-            _                                     => MailKit.DeliveryStatusNotification.Never,
-        };
+        DeliveryStatusNotification = (DeliveryStatusNotification)DeliveryNotificationOption;
     }
 
     private void SetLegacyBodyFormat()

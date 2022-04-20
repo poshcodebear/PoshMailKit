@@ -11,7 +11,7 @@ public class SmtpProcessor
     public int SmtpPort { get; set; }
     public MimeMessage Message { get; set; }
     public PMKSmtpClient Client { get; set; }
-    public DeliveryStatusNotification? Notification { get; set; }
+    public DeliveryStatusNotification Notification { get; set; }
     public SecureSocketOptions SecureSocketOptions { get; set; }
     public NetworkCredential Credential { get; set; }
     public bool RequireSecureConnection { get; set; }
