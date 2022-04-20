@@ -48,6 +48,8 @@ namespace PoshMailKit.Internals
                         Client.Authenticate(Credential);
                     Client.Send(Message);
                 }
+                else
+                    throw new System.InvalidOperationException("SecureConnection requirements not met, unable to send");
                 Client.Disconnect(true);
             }
         }
