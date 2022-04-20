@@ -189,7 +189,7 @@ namespace PoshMailKit
         [Parameter(
             ParameterSetName = "Modern",
             ValueFromPipelineByPropertyName = true)]
-        public DeliveryStatusNotification? DeliveryStatusNotification { get; set; }
+        public DeliveryStatusNotification DeliveryStatusNotification { get; set; }
         #endregion
 
         #region Parameter: MessagePriority
@@ -457,22 +457,7 @@ namespace PoshMailKit
 
         private void SetLegacyNotification()
         {
-            // Translate notification; default is null and does nothing
-            switch (DeliveryNotificationOption)
-            {
-                case DeliveryNotificationOptions.OnSuccess:
-                    DeliveryStatusNotification = MailKit.DeliveryStatusNotification.Success;
-                    break;
-                case DeliveryNotificationOptions.OnFailure:
-                    DeliveryStatusNotification = MailKit.DeliveryStatusNotification.Failure;
-                    break;
-                case DeliveryNotificationOptions.Delay:
-                    DeliveryStatusNotification = MailKit.DeliveryStatusNotification.Delay;
-                    break;
-                case DeliveryNotificationOptions.Never:
-                    DeliveryStatusNotification = MailKit.DeliveryStatusNotification.Never;
-                    break;
-            }
+            DeliveryStatusNotification = (DeliveryStatusNotification)DeliveryNotificationOption;
         }
 
         private void SetLegacyBodyFormat()
