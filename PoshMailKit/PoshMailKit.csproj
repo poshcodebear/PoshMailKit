@@ -59,7 +59,7 @@
   </ItemGroup>
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="pwsh.exe -C &quot;&amp; '$(TargetDir)\Build\BuildScript.ps1'&quot;" />
+    <Exec Command="pwsh -C &quot;&amp; '$(TargetDir)\Build\BuildScript.ps1'&quot;" />
   </Target>
   
 </Project>
