@@ -5,7 +5,7 @@ using System.Net;
 
 namespace PoshMailKit.Internals;
 
-public class SmtpProcessor
+public class SmtpProcessor : IDisposable
 {
     public string SmtpServer { get; set; }
     public int SmtpPort { get; set; }
@@ -52,5 +52,11 @@ public class SmtpProcessor
                 throw new System.InvalidOperationException("SecureConnection requirements not met, unable to send");
             Client.Disconnect(true);
         }
+    }
+
+    public void Dispose()
+    {
+        Client.Dispose();
+        Message.Dispose();
     }
 }
