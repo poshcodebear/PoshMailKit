@@ -297,7 +297,7 @@ public class SendMKMailMessage : PSCmdlet
         MailMessageBuilder.NewMailBody(BodyFormat, CharsetEncoding, Body, ContentTransferEncoding);
         MailMessageBuilder.AddAttachments(FilesToAttach);
 
-        SmtpProcessor processor = new()
+        using SmtpProcessor processor = new()
         {
             SmtpServer = SmtpServer,
             SmtpPort = Port,
