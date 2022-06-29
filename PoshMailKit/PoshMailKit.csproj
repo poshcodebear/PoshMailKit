@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
@@ -53,13 +53,13 @@
     <None Update="Build\BuildConfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Build\BuildScript.ps1">
+    <None Update="Build\PostBuildScript.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="pwsh -C &quot;&amp; '$(TargetDir)\Build\BuildScript.ps1'&quot;" />
+    <Exec Command="pwsh -C &quot;&amp; '$(TargetDir)\Build\PostBuildScript.ps1'&quot;" />
   </Target>
 
 </Project>
