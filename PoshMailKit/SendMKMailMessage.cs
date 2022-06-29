@@ -300,7 +300,7 @@ namespace PoshMailKit
             MailMessage.NewMailBody(BodyFormat, CharsetEncoding, Body, ContentTransferEncoding);
             MailMessage.AddAttachments(FilesToAttach);
 
-            SmtpProcessor processor = new SmtpProcessor()
+            using (SmtpProcessor processor = new SmtpProcessor()
             {
                 SmtpServer = SmtpServer,
                 SmtpPort = Port,
@@ -308,29 +308,30 @@ namespace PoshMailKit
                 Message = MailMessage.Message,
                 Notification = DeliveryStatusNotification,
                 RequireSecureConnection = RequireSecureConnection,
-            };
-
-            if (Credential != null)
-                processor.Credential = (NetworkCredential)Credential;
-
-            try
+            })
             {
-                processor.SendMailMessage();
-            }
-            catch (Exception ex)
-            {
-                string errorId = "UnableToSendToServer";
-                ErrorCategory category = ErrorCategory.OperationStopped;
-                if (ex is InvalidOperationException)
+                if (Credential != null)
+                    processor.Credential = (NetworkCredential)Credential;
+
+                try
                 {
-                    errorId = "SecureConnectionRequirementsNotMet";
-                    category = ErrorCategory.SecurityError;
+                    processor.SendMailMessage();
                 }
+                catch (Exception ex)
+                {
+                    string errorId = "UnableToSendToServer";
+                    ErrorCategory category = ErrorCategory.OperationStopped;
+                    if (ex is InvalidOperationException)
+                    {
+                        errorId = "SecureConnectionRequirementsNotMet";
+                        category = ErrorCategory.SecurityError;
+                    }
 
-                ErrorRecord errorRecord = new ErrorRecord(ex, errorId, category, processor);
-                string errorDetails = $"{SmtpServer}:{Port} (SSO:{SecureSocketOptions})";
-                errorRecord.ErrorDetails = new ErrorDetails($"{ex.Message} ({errorDetails})");
-                WriteError(errorRecord);
+                    ErrorRecord errorRecord = new ErrorRecord(ex, errorId, category, processor);
+                    string errorDetails = $"{SmtpServer}:{Port} (SSO:{SecureSocketOptions})";
+                    errorRecord.ErrorDetails = new ErrorDetails($"{ex.Message} ({errorDetails})");
+                    WriteError(errorRecord);
+                }
             }
         }
 

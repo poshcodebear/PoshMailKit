@@ -1,11 +1,12 @@
-﻿using MimeKit;
+﻿using System;
+using MimeKit;
 using MailKit.Security;
 using MailKit;
 using System.Net;
 
 namespace PoshMailKit.Internals
 {
-    public class SmtpProcessor
+    public class SmtpProcessor: IDisposable
     {
         public string SmtpServer { get; set; }
         public int SmtpPort { get; set; }
@@ -52,6 +53,12 @@ namespace PoshMailKit.Internals
                     throw new System.InvalidOperationException("SecureConnection requirements not met, unable to send");
                 Client.Disconnect(true);
             }
+        }
+
+        public void Dispose()
+        {
+            Client.Dispose();
+            Message.Dispose();
         }
     }
 }
