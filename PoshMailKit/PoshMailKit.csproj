@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
@@ -8,10 +8,10 @@
     <TargetFramework>net6.0</TargetFramework>
     <Authors>The PowerShell Bear</Authors>
     <VersionPrefix>2.0.0</VersionPrefix>
-    <VersionSuffix>alpha4</VersionSuffix>
+    <VersionSuffix>-alpha5</VersionSuffix>
     <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
     <FileVersion>$(VersionPrefix)</FileVersion>
-    <Version>$(VersionPrefix)-$(VersionSuffix)</Version>
+    <Version>$(VersionPrefix)$(VersionSuffix)</Version>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/poshcodebear/PoshMailKit</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -53,13 +53,17 @@
     <None Update="Build\BuildConfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Build\BuildScript.ps1">
+    <None Update="Build\PostBuildScript.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="pwsh -C &quot;&amp; '$(ProjectDir)\Build\PreBuildScript.ps1'&quot;" />
+  </Target>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="pwsh -C &quot;&amp; '$(TargetDir)\Build\BuildScript.ps1'&quot;" />
+    <Exec Command="pwsh -C &quot;&amp; '$(TargetDir)\Build\PostBuildScript.ps1'&quot;" />
   </Target>
 
 </Project>
