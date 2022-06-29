@@ -108,7 +108,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'https://github.com/poshcodebear/PoshMailKit/releases/tag/v1.1.0'
+        ReleaseNotes = 'https://github.com/poshcodebear/PoshMailKit/releases/tag/v1.1.1'
 
         # Prerelease string of this module
         #Prerelease = ''
